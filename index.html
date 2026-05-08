@@ -362,21 +362,39 @@ async function initModerator() {
 }
 
 function subscribeModParticipants() {
-  const ch = sb.channel('mod-' + sessionId)
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'participants', filter: 'session_id=eq.' + sessionId }, payload => {
-      participants[payload.new.id] = payload.new;
+  // Polling — každé 2s fetchuje účastníky a odpovědi přímo z DB
+  // Spolehlivější než Supabase realtime na free tier
+  pollModerator();
+}
+
+async function pollModerator() {
+  if (role !== 'moderator' || !sessionId) return;
+
+  // Fetch participants
+  const { data: pData } = await sb.from('participants').select('*').eq('session_id', sessionId);
+  if (pData) {
+    let changed = false;
+    pData.forEach(p => { if (!participants[p.id]) { participants[p.id] = p; changed = true; } });
+    if (changed) {
       if (phase === 'lobby') renderModLobby();
-      else if (phase === 'question') renderWaitingList();
-    })
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'answers', filter: 'session_id=eq.' + sessionId }, payload => {
-      if (phase === 'question' && payload.new.question_index === currentQ) {
-        answeredThisQ.add(payload.new.participant_id);
+      else renderWaitingList();
+    }
+  }
+
+  // Fetch answers for current question
+  if (phase === 'question') {
+    const { data: aData } = await sb.from('answers').select('participant_id').eq('session_id', sessionId).eq('question_index', currentQ);
+    if (aData) {
+      const prevSize = answeredThisQ.size;
+      aData.forEach(a => answeredThisQ.add(a.participant_id));
+      if (answeredThisQ.size !== prevSize) {
         renderWaitingList();
         updateModActionBtn();
       }
-    })
-    .subscribe();
-  subs.push(ch);
+    }
+  }
+
+  setTimeout(pollModerator, 2000);
 }
 
 function renderModLobby() {
@@ -636,22 +654,37 @@ async function joinSession() {
 }
 
 function subscribeParticipant() {
-  const ch = sb.channel('p-' + sessionId + '-' + Math.random())
-    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'sessions', filter: 'id=eq.' + sessionId }, payload => {
-      const s = payload.new;
-      phase = s.phase;
-      currentQ = s.current_question;
-      if (s.phase === 'question') {
-        selectedOpts = [];
-        renderParticipantQuestion(s.current_question);
-      } else if (s.phase === 'results') {
-        showScreen('answered-screen');
-      } else if (s.phase === 'final') {
-        showScreen('p-final-screen');
-      }
-    })
-    .subscribe();
-  subs.push(ch);
+  pollParticipant();
+}
+
+async function pollParticipant() {
+  if (role !== 'participant' || !sessionId) return;
+  const { data: s } = await sb.from('sessions').select('phase, current_question').eq('id', sessionId).single();
+  if (!s) { setTimeout(pollParticipant, 2000); return; }
+
+  const newPhase = s.phase;
+  const newQ = s.current_question;
+
+  if (newPhase === 'final') { showScreen('p-final-screen'); return; }
+
+  if (newPhase === 'question' && (newPhase !== phase || newQ !== currentQ)) {
+    phase = newPhase;
+    currentQ = newQ;
+    const { data: existing } = await sb.from('answers').select('id').eq('session_id', sessionId).eq('participant_id', participantId).eq('question_index', currentQ);
+    if (existing && existing.length > 0) {
+      showScreen('answered-screen');
+    } else {
+      selectedOpts = [];
+      renderParticipantQuestion(currentQ);
+    }
+  } else if (newPhase === 'results' && phase !== 'results') {
+    phase = newPhase;
+    showScreen('answered-screen');
+  } else {
+    phase = newPhase;
+  }
+
+  setTimeout(pollParticipant, 2000);
 }
 
 function renderParticipantQuestion(qIdx) {
