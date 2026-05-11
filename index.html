@@ -53,7 +53,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0D1B2A;color:#F0F4F
 .q-body{padding:1.2rem 1rem .5rem}
 .q-text{font-size:1.1rem;font-weight:700;line-height:1.4;margin-bottom:1.2rem}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;padding:0 1rem 1rem}
-.opt{padding:1rem .75rem;border-radius:14px;border:3px solid transparent;cursor:pointer;font-size:.92rem;font-weight:600;color:white;text-align:left;display:flex;align-items:flex-start;gap:.6rem;line-height:1.3;transition:transform .1s,box-shadow .1s}
+.opt{padding:1.1rem .85rem;border-radius:14px;border:3px solid transparent;cursor:pointer;font-size:1rem;font-weight:600;color:white;text-align:left;display:flex;align-items:flex-start;gap:.6rem;line-height:1.3;transition:transform .1s,box-shadow .1s}
 .opt:active{transform:scale(.97)}
 .opt.selected{box-shadow:0 0 0 3px white,0 0 0 6px rgba(255,255,255,.2)}
 .opt.correct{animation:flashGreen .5s forwards}
@@ -399,15 +399,8 @@ function renderModQuestion(){
           ${q.opts.map((o,i)=>`<div class="mod-opt" id="mopt-${i}"><span style="font-weight:900;margin-right:4px">${'ABCD'[i]}.</span>${o}</div>`).join('')}
         </div>
       </div>
-      <div>
-        <div style="font-size:.72rem;color:#7A8FAF;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem">Živé odpovědi</div>
-        <div class="bar-rows" id="bar-rows">
-          ${q.opts.map((o,i)=>`<div class="brow">
-            <div class="brow-lbl">${'ABCD'[i]}. ${o}</div>
-            <div class="brow-track"><div class="brow-fill" id="bf-${i}" style="width:0%;background:${BAR_BG[i]}"></div></div>
-            <div class="brow-cnt" id="bc-${i}">0</div>
-          </div>`).join('')}
-        </div>
+      <div id="bars-placeholder" style="text-align:center;padding:2rem;color:#2A3F5F;font-size:.85rem;letter-spacing:.05em;text-transform:uppercase">
+        Výsledky se zobrazí po uzavření otázky
       </div>
     </div>
     <div class="mod-q-right">
@@ -424,7 +417,6 @@ function renderModQuestion(){
       </div>
     </div>`;
   renderNamesPanel();
-  pollLiveBars();
   startModTimer();
 }
 
@@ -440,14 +432,12 @@ function startModTimer(){
 }
 
 async function timeUpMod(){
-  // Lock answers in DB
-  await sb.from('sessions').update({phase:'results'}).eq('id',sessionId);
   phase='results';
-  const el=document.getElementById('mod-timer');if(el)el.textContent='⏰';
+  await sb.from('sessions').update({phase:'results'}).eq('id',sessionId);
+  const el=document.getElementById('mod-timer');if(el){el.textContent='⏰';el.style.color='#E8175D'}
   const btn=document.getElementById('show-res-btn');
   if(btn){btn.disabled=false;btn.textContent='📊 Zobrazit správnou odpověď'}
   renderNamesPanel();
-  updateModBtn();
 }
 
 function updateModBtn(){
@@ -504,12 +494,18 @@ async function revealResults(){
   phase='results';
   await sb.from('sessions').update({phase:'results'}).eq('id',sessionId);
   const q=QUESTIONS[currentQ];
-  // Highlight correct answer in mod opts preview
+  // Highlight correct answer
   q.opts.forEach((o,i)=>{
     const el=document.getElementById('mopt-'+i);if(!el)return;
     if(i===q.correct)el.classList.add('revealed-correct');
     else el.classList.add('revealed-wrong');
   });
+  // Inject bars into placeholder
+  const ph=document.getElementById('bars-placeholder');
+  if(ph){
+    const barsHtml=`<div><div style="font-size:.72rem;color:#7A8FAF;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem">Výsledky hlasování</div><div class="bar-rows" id="bar-rows">${q.opts.map((o,i)=>`<div class="brow"><div class="brow-lbl">${'ABCD'[i]}. ${o}</div><div class="brow-track"><div class="brow-fill" id="bf-${i}" style="width:0%;background:${BAR_BG[i]}"></div></div><div class="brow-cnt" id="bc-${i}">0</div></div>`).join('')}</div></div>`;
+    ph.outerHTML=barsHtml;
+  }
   await pollLiveBars();
   const isLast=currentQ>=QUESTIONS.length-1;
   const actDiv=document.getElementById('mod-actions');
@@ -661,7 +657,7 @@ async function doSubmit(){
     question_index:currentQ,selected_option:selectedOpt,
     is_correct:isCorrect,answered_at:new Date().toISOString()
   });
-  if(error){toast('Chyba odeslání');document.getElementById('sbtn').disabled=false;return}
+  if(error){toast('Chyba: '+error.message,5000);console.error('Submit error:',error);document.getElementById('sbtn').disabled=false;return}
   if(isCorrect){myCorrectCount++;myAnswerTimes.push(Date.now())}
   // Show only selected state, not correct/wrong
   document.querySelectorAll('.opt').forEach((o,i)=>{
