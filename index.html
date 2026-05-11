@@ -93,7 +93,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--dark);color:va
 @keyframes popIn{0%{transform:scale(0)}100%{transform:scale(1)}}
 
 /* ── MODERATOR ── */
-#mod-screen{background:var(--dark);display:flex;flex-direction:column;min-height:100vh}
+#mod-screen{background:var(--dark);flex-direction:column;min-height:100vh}
 /* ══ MODERATOR FULL REDESIGN ══ */
 
 /* Topbar */
@@ -242,7 +242,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--dark);color:va
   <div class="join-card" style="margin:auto">
     <h2>Připojit se</h2>
     <p>Zadej kód ze sdílené obrazovky</p>
-    <input type="text" id="code-input" class="join-input code" placeholder="ZLATÝ-KAPR" maxlength="25" oninput="this.value=this.value.toUpperCase()" autocomplete="off">
+    <input type="text" id="code-input" class="join-input code" placeholder="KAPR" maxlength="25" oninput="this.value=this.value.toUpperCase()" autocomplete="off">
     <input type="text" id="name-input" class="join-input" placeholder="Tvoje jméno nebo přezdívka" maxlength="20" autocomplete="off">
     <button class="join-btn" onclick="joinSession()">Připojit se →</button>
     <p style="margin-top:1rem;font-size:.78rem;color:var(--muted)">Kód najdeš na sdílené obrazovce moderátora</p>
@@ -329,9 +329,8 @@ const SUPABASE_URL='https://zzyftqgvsnhmjhcljfft.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp6eWZ0cWd2c25obWpoY2xqZmZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMzgyNzMsImV4cCI6MjA5MzgxNDI3M30.Arv9nqzmSs8fo0HCq3cK9HteQDKeeDf8f_y07jHp-us';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-const ADJECTIVES=['MODRÝ','RYCHLÁ','ZLATÝ','DIVOKÁ','TUČNÝ','MALÁ','BÍLÝ','CHYTRÁ','LÍNÝ','VESELÁ','STATNÝ','ŠIKOVNÁ','TAJNÝ','HLADOVÝ','ŠŤASTNÝ','MAZANÁ'];
-const NOUNS=['KAPR','LIŠKA','MEDVĚD','SOVA','HROCH','KOZA','VLAK','ROBOT','KAFÉ','DATLA','JEŽEK','PÁREK','TRAKTOR','BOBR','KOLÁČ','DELFÍN'];
-function genCode(){return ADJECTIVES[Math.floor(Math.random()*ADJECTIVES.length)]+'-'+NOUNS[Math.floor(Math.random()*NOUNS.length)]}
+const CODES=['KAPR','BOBR','JEŽEK','DELFÍN','HROCH','LENOCH','PÁREK','TRAKTOR','KOLÁČ','MEDVĚD','SOVA','LIŠKA','ROBOT','KAFÉ','RAKETA','TUŇÁK','MRKEV','ŠNEČEK','OBLAK','PINGWIN','ZAJÍC','PONORKA','ŠUNKA','KOMET','DRAK'];
+function genCode(){return CODES[Math.floor(Math.random()*CODES.length)]}
 
 const FISH_COLORS=['#1B4FD8','#00A86B','#E8175D','#FF5C00','#7B2FBE','#00C4B4','#FFD600','#C0392B','#2E86C1','#1E8449'];
 const FISH_ICONS=['🐟','🐠','🐡','🦈','🐬','🦑','🦐','🐙','🦀','🐋'];
