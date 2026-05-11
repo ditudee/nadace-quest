@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nadace Kvíz</title>
+<title>KPÍčkovej kvízeček</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -198,8 +198,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0D1B2A;color:#F0F4F
 
 <div id="role-screen" class="screen active">
   <div class="role-card">
-    <div class="role-title">Nadace Kvíz 🏆</div>
-    <p class="role-sub">Kdo zná Nadaci nejlíp?</p>
+    <div class="role-title">KPÍčkovej kvízeček 🏆</div>
+    <p class="role-sub">Tak schválně!</p>
     <button class="rbtn mod" onclick="goMod()">🎙️ Jsem moderátor</button>
     <button class="rbtn play" onclick="goJoin()">🙋 Chci hrát</button>
   </div>
@@ -256,7 +256,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0D1B2A;color:#F0F4F
 
 <div id="mod-screen" class="screen">
   <div class="mod-top">
-    <h1>Nadace Kvíz — moderátor</h1>
+    <h1>KPÍčkovej kvízeček — moderátor</h1>
     <div class="mod-code-badge" id="mod-code-lbl">—</div>
   </div>
   <div class="mod-body" id="mod-body"></div>
@@ -264,8 +264,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0D1B2A;color:#F0F4F
 
 <div id="final-screen" class="screen">
   <div class="final-inner">
-    <div class="final-title">🏆 Výsledky</div>
-    <p class="final-sub">Kdo zná Nadaci nejlíp?</p>
+    <div class="final-title">🏆 KPÍčkovej kvízeček</div>
+    <p class="final-sub">Tak schválně!</p>
     <div class="podium" id="podium"></div>
     <div class="score-table" id="score-table"></div>
   </div>
@@ -556,7 +556,7 @@ async function showFinal(){
     ${slowest&&slowest.name!==winner?.name&&slowest.name!==fastest?.name?`<div class="pod-card slow"><div class="pod-emoji">🐢</div><div class="pod-name">${slowest.name}</div><div class="pod-lbl">Největší přemýšlivec</div></div>`:''}`;
   document.getElementById('score-table').innerHTML=ranking.slice(0,5).map((r,i)=>`
     <div class="score-row">
-      <div class="score-rank ${i===0?'top':#''}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
+      <div class="score-rank ${i===0?'top':''}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
       <div class="score-name">${r.name}</div>
       <div class="score-pts">${r.correct} / ${QUESTIONS.length}</div>
       <div class="score-time">${fmt(r.avgT)} průměr</div>
