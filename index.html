@@ -7,724 +7,692 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
-  --blue: #2563eb; --blue-light: #dbeafe; --blue-dark: #1d4ed8;
-  --green: #16a34a; --green-light: #dcfce7;
-  --amber: #d97706; --amber-light: #fef3c7;
-  --red: #dc2626; --red-light: #fee2e2;
-  --purple: #7c3aed; --purple-light: #ede9fe;
-  --teal: #0d9488; --teal-light: #ccfbf1;
-  --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
-  --gray-300: #d1d5db; --gray-400: #9ca3af; --gray-500: #6b7280;
-  --gray-700: #374151; --gray-800: #1f2937; --gray-900: #111827;
+  --blue:#1B4FD8; --green:#00A86B; --pink:#E8175D; --orange:#FF5C00;
+  --purple:#7B2FBE; --teal:#00C4B4; --yellow:#FFD600;
+  --dark:#0D1B2A; --dark2:#162032; --dark3:#1E2E44;
+  --text:#F0F4FF; --muted:#7A8FAF;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: system-ui, -apple-system, sans-serif; background: var(--gray-50); min-height: 100vh; }
-.screen { display: none; min-height: 100vh; }
-.screen.active { display: flex; flex-direction: column; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--dark);color:var(--text);min-height:100vh;overflow-x:hidden}
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex;flex-direction:column}
 
-/* ROLE SELECT */
-#role-screen { align-items: center; justify-content: center; background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%); }
-.role-card { background: white; border-radius: 20px; padding: 2.5rem; width: 90%; max-width: 420px; text-align: center; }
-.role-card h1 { font-size: 1.6rem; font-weight: 700; color: var(--gray-900); margin-bottom: .4rem; }
-.role-card .subtitle { color: var(--gray-500); margin-bottom: 2rem; font-size: .95rem; }
-.role-btn { display: block; width: 100%; padding: 1rem; border-radius: 12px; border: 2px solid var(--gray-200); background: white; font-size: 1rem; font-weight: 600; cursor: pointer; margin-bottom: .75rem; transition: all .15s; color: var(--gray-800); }
-.role-btn:hover { border-color: var(--blue); background: var(--blue-light); color: var(--blue-dark); }
-.role-btn.primary { background: var(--blue); color: white; border-color: var(--blue); }
-.role-btn.primary:hover { background: var(--blue-dark); }
+/* ── ROLE SCREEN ── */
+#role-screen{align-items:center;justify-content:center;background:radial-gradient(ellipse at 60% 40%,#1B3A7A 0%,var(--dark) 70%)}
+.role-card{text-align:center;max-width:440px;width:90%;padding:3rem 2rem}
+.role-logo{font-size:2.8rem;font-weight:900;letter-spacing:-.02em;margin-bottom:.25rem;background:linear-gradient(135deg,#fff 0%,#93C5FD 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.role-sub{color:var(--muted);font-size:.95rem;margin-bottom:3rem}
+.role-btn{display:block;width:100%;padding:1.1rem;border-radius:14px;border:none;font-size:1rem;font-weight:700;cursor:pointer;margin-bottom:.85rem;transition:transform .1s,opacity .15s;letter-spacing:.01em}
+.role-btn:hover{transform:translateY(-2px);opacity:.92}
+.role-btn:active{transform:translateY(0)}
+.role-btn.mod{background:linear-gradient(135deg,var(--blue),#0E36A8);color:white}
+.role-btn.part{background:linear-gradient(135deg,var(--green),#007A4D);color:white}
 
-/* JOIN */
-#join-screen { align-items: center; justify-content: center; background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%); }
-.join-card { background: white; border-radius: 20px; padding: 2.5rem; width: 90%; max-width: 380px; text-align: center; }
-.join-card h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: .4rem; color: var(--gray-900); }
-.join-card p { color: var(--gray-500); margin-bottom: 1.2rem; font-size: .9rem; }
-.join-card input { width: 100%; padding: .85rem 1rem; border: 2px solid var(--gray-200); border-radius: 10px; font-size: 1.1rem; text-align: center; outline: none; transition: border-color .15s; margin-bottom: .75rem; }
-.join-card input:focus { border-color: var(--blue); }
-.join-card input.code-input { font-size: 1.3rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; background: var(--gray-50); }
-.join-card button { width: 100%; padding: .9rem; background: var(--blue); color: white; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; }
-.join-card button:hover { background: var(--blue-dark); }
-.join-divider { font-size: .8rem; color: var(--gray-400); margin: .5rem 0; }
+/* ── JOIN SCREEN ── */
+#join-screen{align-items:center;justify-content:center;background:radial-gradient(ellipse at 40% 60%,#0D3A2A 0%,var(--dark) 70%)}
+.join-card{background:var(--dark2);border:1px solid #2A3F5F;border-radius:20px;padding:2.5rem;width:90%;max-width:380px;text-align:center}
+.join-card h2{font-size:1.5rem;font-weight:800;margin-bottom:.3rem}
+.join-card p{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
+.join-input{width:100%;padding:.9rem 1rem;background:var(--dark3);border:2px solid #2A3F5F;border-radius:12px;color:var(--text);font-size:1.1rem;text-align:center;outline:none;transition:border-color .15s;margin-bottom:.75rem}
+.join-input:focus{border-color:var(--blue)}
+.join-input.code{font-size:1.4rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--yellow)}
+.join-btn{width:100%;padding:.95rem;background:linear-gradient(135deg,var(--blue),#0E36A8);color:white;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;transition:opacity .15s}
+.join-btn:hover{opacity:.88}
 
-/* WAITING */
-#waiting-screen { align-items: center; justify-content: center; background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%); }
-.waiting-card { background: white; border-radius: 20px; padding: 2.5rem; text-align: center; max-width: 380px; width: 90%; }
-.waiting-card h2 { font-size: 1.3rem; font-weight: 700; color: var(--gray-900); margin-bottom: .4rem; }
-.waiting-card p { color: var(--gray-500); font-size: .95rem; }
-.pulse-dot { width: 14px; height: 14px; background: var(--green); border-radius: 50%; margin: 1.5rem auto; animation: pulse 1.5s infinite; }
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
-.name-badge { display: inline-block; background: var(--blue-light); color: var(--blue-dark); padding: .4rem 1rem; border-radius: 20px; font-weight: 600; margin-top: .75rem; font-size: 1rem; }
-.code-badge { display: inline-block; background: var(--gray-100); color: var(--gray-700); padding: .3rem .9rem; border-radius: 20px; font-weight: 700; font-size: .85rem; letter-spacing: .08em; margin-top: .5rem; }
+/* ── WAITING (participant) ── */
+#waiting-screen{align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 50%,#0D2A1A 0%,var(--dark) 70%)}
+.waiting-card{background:var(--dark2);border:1px solid #2A3F5F;border-radius:20px;padding:2.5rem;text-align:center;max-width:360px;width:90%}
+.waiting-card h2{font-size:1.4rem;font-weight:800;margin-bottom:.3rem}
+.waiting-card p{color:var(--muted);font-size:.9rem}
+.bounce-emoji{font-size:3rem;display:block;margin:1.2rem auto;animation:bounce 1.2s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.name-pill{display:inline-block;background:linear-gradient(135deg,var(--blue),var(--purple));color:white;padding:.45rem 1.2rem;border-radius:30px;font-weight:700;font-size:1rem;margin-top:1rem}
+.code-pill{display:inline-block;background:var(--dark3);color:var(--yellow);padding:.3rem .9rem;border-radius:20px;font-weight:700;font-size:.85rem;letter-spacing:.1em;margin-top:.5rem}
 
-/* QUESTION (participant) */
-#question-screen { background: var(--gray-50); }
-.q-header { background: var(--blue); color: white; padding: 1.2rem 1rem; text-align: center; }
-.q-header .block-name { font-size: .72rem; opacity: .8; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .25rem; }
-.q-header .q-num { font-size: .82rem; opacity: .7; margin-bottom: .4rem; }
-.q-header .q-text { font-size: 1.05rem; font-weight: 600; line-height: 1.4; }
-.q-type-badge { display: inline-block; margin-top: .5rem; padding: .25rem .75rem; border-radius: 20px; font-size: .75rem; font-weight: 600; }
-.q-type-badge.multi { background: rgba(255,255,255,.25); }
-.q-type-badge.single { background: rgba(255,200,0,.35); }
-.options-grid { padding: 1rem; display: flex; flex-direction: column; gap: .6rem; flex: 1; overflow-y: auto; }
-.opt-btn { padding: .9rem 1rem; border-radius: 12px; border: 2px solid var(--gray-200); background: white; font-size: .95rem; text-align: left; cursor: pointer; transition: all .15s; color: var(--gray-800); display: flex; align-items: center; gap: .75rem; }
-.opt-btn .opt-key { width: 28px; height: 28px; border-radius: 6px; background: var(--gray-100); color: var(--gray-600); font-size: .75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.opt-btn.selected { border-color: var(--blue); background: var(--blue-light); }
-.opt-btn.selected .opt-key { background: var(--blue); color: white; }
-.submit-area { padding: 1rem; }
-.submit-btn { width: 100%; padding: .9rem; background: var(--blue); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; }
-.submit-btn:disabled { background: var(--gray-300); cursor: default; }
+/* ── QUESTION (participant) ── */
+#question-screen{background:var(--dark)}
+.q-topbar{padding:1rem 1.2rem .8rem;display:flex;align-items:center;justify-content:space-between;background:var(--dark2);border-bottom:1px solid #2A3F5F}
+.q-topbar .block-tag{font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);background:var(--dark3);padding:.25rem .7rem;border-radius:20px}
+.q-topbar .q-counter{font-size:.8rem;color:var(--muted)}
+.q-progress{height:3px;background:var(--dark3)}
+.q-progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--teal));transition:width .4s}
+.q-body{padding:1.2rem 1rem .5rem}
+.q-text{font-size:1.1rem;font-weight:700;line-height:1.45;margin-bottom:.6rem}
+.q-type-tag{display:inline-block;padding:.25rem .8rem;border-radius:20px;font-size:.75rem;font-weight:700;margin-bottom:1rem}
+.q-type-tag.multi{background:rgba(27,79,216,.3);color:#93C5FD;border:1px solid rgba(27,79,216,.5)}
+.q-type-tag.single{background:rgba(255,214,0,.15);color:var(--yellow);border:1px solid rgba(255,214,0,.3)}
+.opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;padding:0 1rem 1rem}
+.opt-card{padding:.9rem .75rem;border-radius:14px;border:none;cursor:pointer;font-size:.9rem;font-weight:600;text-align:left;transition:transform .1s,opacity .15s;color:white;display:flex;align-items:flex-start;gap:.6rem;line-height:1.3}
+.opt-card:active{transform:scale(.97)}
+.opt-card.selected{box-shadow:0 0 0 3px white,0 0 0 5px rgba(255,255,255,.3);transform:scale(.97)}
+.opt-card .opt-key{width:24px;height:24px;border-radius:6px;background:rgba(0,0,0,.25);font-size:.7rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.opt-colors{--c0:#1B4FD8;--c1:#00A86B;--c2:#E8175D;--c3:#FF5C00;--c4:#7B2FBE;--c5:#00C4B4;--c6:#FFD600;--c7:#E8175D}
+.opt-card:nth-child(1){background:linear-gradient(135deg,#1B4FD8,#0E36A8)}
+.opt-card:nth-child(2){background:linear-gradient(135deg,#00A86B,#007A4D)}
+.opt-card:nth-child(3){background:linear-gradient(135deg,#E8175D,#A80F42)}
+.opt-card:nth-child(4){background:linear-gradient(135deg,#FF5C00,#C44400)}
+.opt-card:nth-child(5){background:linear-gradient(135deg,#7B2FBE,#561F87)}
+.opt-card:nth-child(6){background:linear-gradient(135deg,#00C4B4,#008C80)}
+.opt-card:nth-child(7){background:linear-gradient(135deg,#B8860B,#8B6508)}
+.opt-card:nth-child(8){background:linear-gradient(135deg,#C0392B,#922B21)}
+.opt-card:nth-child(9){background:linear-gradient(135deg,#1B4FD8,#0E36A8)}
+.opt-card:nth-child(10){background:linear-gradient(135deg,#00A86B,#007A4D)}
+.opt-card:nth-child(11){background:linear-gradient(135deg,#E8175D,#A80F42)}
+.opt-card:nth-child(12){background:linear-gradient(135deg,#FF5C00,#C44400)}
+.opt-card:nth-child(13){background:linear-gradient(135deg,#7B2FBE,#561F87)}
+.opt-card:nth-child(14){background:linear-gradient(135deg,#00C4B4,#008C80)}
+.opt-card:nth-child(15){background:linear-gradient(135deg,#B8860B,#8B6508)}
+.submit-wrap{padding:.5rem 1rem 1.5rem}
+.submit-btn{width:100%;padding:1rem;background:linear-gradient(135deg,var(--blue),var(--purple));color:white;border:none;border-radius:14px;font-size:1rem;font-weight:800;cursor:pointer;letter-spacing:.02em;transition:opacity .15s}
+.submit-btn:disabled{background:#2A3F5F;color:var(--muted);cursor:default}
 
-/* ANSWERED */
-#answered-screen { align-items: center; justify-content: center; background: linear-gradient(135deg, #1e3a5f, #2563eb); }
-.answered-card { background: white; border-radius: 20px; padding: 2.5rem; text-align: center; max-width: 340px; width: 90%; }
+/* ── ANSWERED ── */
+#answered-screen{align-items:center;justify-content:center;background:radial-gradient(ellipse,#0D2A1A,var(--dark))}
+.answered-card{background:var(--dark2);border:1px solid #2A3F5F;border-radius:20px;padding:3rem 2rem;text-align:center;max-width:340px;width:90%}
+.check-anim{font-size:4rem;display:block;animation:popIn .4s cubic-bezier(.175,.885,.32,1.275)}
+@keyframes popIn{0%{transform:scale(0)}100%{transform:scale(1)}}
 
-/* MODERATOR */
-#mod-screen { background: var(--gray-900); color: white; flex-direction: row; }
-.mod-left { flex: 1; padding: 1.5rem; display: flex; flex-direction: column; min-width: 0; }
-.mod-right { width: 260px; background: var(--gray-800); padding: 1.5rem; display: flex; flex-direction: column; flex-shrink: 0; border-left: 1px solid #374151; }
-.mod-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
-.mod-top h1 { font-size: .95rem; font-weight: 700; color: white; opacity: .9; }
-.session-code-display { font-size: 1rem; font-weight: 800; background: #1e3a5f; color: #93c5fd; padding: .4rem 1rem; border-radius: 10px; letter-spacing: .1em; }
-.progress-bar { height: 4px; background: #374151; border-radius: 2px; margin-bottom: 1.5rem; }
-.progress-fill { height: 100%; background: var(--blue); border-radius: 2px; transition: width .4s; }
+/* ── MODERATOR ── */
+#mod-screen{background:var(--dark);flex-direction:row}
+.mod-left{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.mod-right{width:300px;background:var(--dark2);border-left:1px solid #2A3F5F;display:flex;flex-direction:column;overflow:hidden}
+
+/* mod topbar */
+.mod-topbar{background:var(--dark2);border-bottom:1px solid #2A3F5F;padding:.8rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.mod-topbar h1{font-size:.9rem;font-weight:700;color:var(--muted)}
+.mod-code{font-size:1.1rem;font-weight:900;color:var(--yellow);letter-spacing:.12em;background:var(--dark3);padding:.3rem 1rem;border-radius:10px}
+.mod-progress{height:4px;background:var(--dark3);flex-shrink:0}
+.mod-progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--teal));transition:width .5s}
+.mod-content{flex:1;overflow-y:auto;padding:1.5rem}
 
 /* lobby */
-.lobby-panel { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-.lobby-panel h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: .4rem; }
-.lobby-panel .code-big { font-size: 3rem; font-weight: 900; color: #93c5fd; letter-spacing: .12em; margin: 1rem 0 .25rem; }
-.lobby-panel .code-hint { font-size: .85rem; color: #6b7280; margin-bottom: 1.5rem; }
-.participant-count { font-size: 3.5rem; font-weight: 800; color: var(--blue); line-height: 1; }
-.lobby-names { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; margin: 1rem 0; max-width: 500px; }
-.name-chip { background: #1e3a5f; color: #93c5fd; padding: .3rem .8rem; border-radius: 20px; font-size: .85rem; font-weight: 500; }
-.start-survey-btn { padding: 1rem 2.5rem; background: var(--green); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 1rem; }
-.start-survey-btn:hover { background: #15803d; }
-.start-survey-btn:disabled { background: #374151; color: #6b7280; cursor: default; }
+.lobby-wrap{display:flex;flex-direction:column;align-items:center;height:100%}
+.lobby-code-big{font-size:4rem;font-weight:900;letter-spacing:.15em;color:var(--yellow);text-shadow:0 0 40px rgba(255,214,0,.4);margin:.5rem 0 .25rem;animation:glow 2s infinite alternate}
+@keyframes glow{0%{text-shadow:0 0 20px rgba(255,214,0,.3)}100%{text-shadow:0 0 50px rgba(255,214,0,.7)}}
+.lobby-hint{font-size:.9rem;color:var(--muted);margin-bottom:1.5rem}
+.aquarium{width:100%;max-width:700px;height:140px;background:linear-gradient(180deg,#0A1F3A 0%,#061428 100%);border-radius:16px;border:1px solid #1B3A5F;position:relative;overflow:hidden;margin-bottom:1.5rem}
+.aquarium::before{content:'';position:absolute;bottom:0;left:0;right:0;height:30px;background:linear-gradient(180deg,transparent,rgba(0,100,200,.15));pointer-events:none}
+.fish{position:absolute;display:flex;align-items:center;gap:6px;padding:6px 14px 6px 10px;border-radius:30px;font-size:.85rem;font-weight:700;color:white;white-space:nowrap;animation:swim 12s linear infinite,popFish .4s cubic-bezier(.175,.885,.32,1.275)}
+.fish .fish-icon{font-size:1.1rem}
+@keyframes swim{0%{transform:translateX(calc(var(--tank-w,700px) + 20px))}100%{transform:translateX(-200px)}}
+@keyframes popFish{0%{transform:scale(0) translateX(0)}30%{transform:scale(1.2) translateX(0)}100%{transform:scale(1) translateX(0)}}
+.lobby-count{font-size:5rem;font-weight:900;color:white;line-height:1;margin-bottom:.25rem}
+.lobby-count-label{font-size:.9rem;color:var(--muted);margin-bottom:1.5rem}
+.start-btn{padding:1.1rem 3rem;background:linear-gradient(135deg,var(--green),#007A4D);color:white;border:none;border-radius:14px;font-size:1.1rem;font-weight:800;cursor:pointer;letter-spacing:.02em;transition:transform .1s,opacity .15s;box-shadow:0 4px 20px rgba(0,168,107,.4)}
+.start-btn:hover{transform:translateY(-2px);opacity:.9}
+.start-btn:disabled{background:#2A3F5F;color:var(--muted);cursor:default;box-shadow:none;transform:none}
 
-/* mod question */
-.mod-q-block { font-size: .72rem; color: #6b7280; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .4rem; }
-.mod-q-text { font-size: 1.4rem; font-weight: 700; line-height: 1.4; margin-bottom: .5rem; color: white; }
-.mod-q-type { font-size: .8rem; padding: .25rem .75rem; border-radius: 20px; display: inline-block; margin-bottom: 1.2rem; }
-.mod-q-type.multi { background: #1e3a5f; color: #93c5fd; }
-.mod-q-type.single { background: #451a03; color: #fcd34d; }
-.live-bars { flex: 1; overflow-y: auto; }
-.bar-item { margin-bottom: .65rem; }
-.bar-label { font-size: .8rem; color: #d1d5db; margin-bottom: .3rem; display: flex; justify-content: space-between; }
-.bar-track { height: 22px; background: #374151; border-radius: 6px; overflow: hidden; }
-.bar-fill { height: 100%; background: var(--blue); border-radius: 6px; transition: width .5s ease; display: flex; align-items: center; padding-left: 8px; font-size: .75rem; font-weight: 600; color: white; }
+/* mod question view */
+.mod-q-block{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:.4rem}
+.mod-q-text{font-size:1.5rem;font-weight:800;line-height:1.35;margin-bottom:.5rem}
+.mod-q-type{display:inline-block;padding:.25rem .8rem;border-radius:20px;font-size:.78rem;font-weight:700;margin-bottom:1.2rem}
+.mod-q-type.multi{background:rgba(27,79,216,.3);color:#93C5FD;border:1px solid rgba(27,79,216,.4)}
+.mod-q-type.single{background:rgba(255,214,0,.15);color:var(--yellow);border:1px solid rgba(255,214,0,.3)}
+.live-bars{display:flex;flex-direction:column;gap:.6rem}
+.bar-row{display:flex;align-items:center;gap:.75rem}
+.bar-opt-label{font-size:.82rem;color:var(--text);min-width:180px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-track{flex:1;height:28px;background:var(--dark3);border-radius:8px;overflow:hidden}
+.bar-fill{height:100%;border-radius:8px;transition:width .5s ease;display:flex;align-items:center;padding-left:10px;font-size:.78rem;font-weight:700;color:white;min-width:0}
+.bar-cnt{font-size:.8rem;color:var(--muted);min-width:28px;text-align:right}
 
-/* results */
-.result-bar-item { margin-bottom: .6rem; }
-.result-bar-label { font-size: .85rem; color: #d1d5db; margin-bottom: .3rem; display: flex; justify-content: space-between; }
-.result-bar-track { height: 28px; background: #374151; border-radius: 6px; overflow: hidden; }
-.result-bar-fill { height: 100%; border-radius: 6px; transition: width .6s ease; display: flex; align-items: center; padding: 0 10px; font-size: .8rem; font-weight: 700; color: white; }
+/* results view */
+.res-bars{display:flex;flex-direction:column;gap:.65rem}
+.res-bar-row{display:flex;align-items:center;gap:.75rem}
+.res-bar-label{font-size:.85rem;color:var(--text);min-width:180px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.res-bar-track{flex:1;height:32px;background:var(--dark3);border-radius:8px;overflow:hidden}
+.res-bar-fill{height:100%;border-radius:8px;transition:width .7s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;padding:0 12px;font-size:.82rem;font-weight:800;color:white}
+.res-bar-pct{font-size:.85rem;font-weight:700;min-width:40px;text-align:right}
 
-/* mod right */
-.mod-right h3 { font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; color: #6b7280; margin-bottom: .75rem; }
-.waiting-list { flex: 1; overflow-y: auto; }
-.waiting-item { display: flex; align-items: center; gap: .5rem; padding: .35rem 0; border-bottom: 1px solid #374151; font-size: .85rem; }
-.waiting-item .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.dot-waiting { background: var(--amber); animation: pulse 1.5s infinite; }
-.dot-done { background: var(--green); }
-.answered-count { font-size: 1.8rem; font-weight: 800; color: white; margin-bottom: .2rem; }
-.answered-label { font-size: .75rem; color: #6b7280; margin-bottom: 1.2rem; }
-.mod-btn { width: 100%; padding: .85rem; border: none; border-radius: 10px; font-size: .95rem; font-weight: 700; cursor: pointer; margin-top: .65rem; transition: all .15s; }
-.mod-btn.blue { background: var(--blue); color: white; }
-.mod-btn.blue:hover { background: var(--blue-dark); }
-.mod-btn.green { background: var(--green); color: white; }
-.mod-btn.green:hover { background: #15803d; }
-.mod-btn:disabled { background: #374151; color: #6b7280; cursor: default; }
+/* mod right panel */
+.mod-right-top{padding:1.2rem 1.2rem .8rem;border-bottom:1px solid #2A3F5F;flex-shrink:0}
+.mod-answered-big{font-size:2.5rem;font-weight:900;line-height:1}
+.mod-answered-label{font-size:.75rem;color:var(--muted);margin-top:.2rem}
+.waiting-on{font-size:.82rem;color:var(--orange);font-weight:700;margin-top:.6rem;min-height:1.2rem}
+.participants-grid{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-wrap:wrap;gap:.5rem;align-content:flex-start}
+.p-chip{padding:.4rem .9rem;border-radius:30px;font-size:.82rem;font-weight:700;transition:all .3s;display:flex;align-items:center;gap:.4rem}
+.p-chip.waiting{background:var(--dark3);color:var(--muted);border:1px solid #2A3F5F}
+.p-chip.done{background:rgba(0,168,107,.2);color:#4ADE80;border:1px solid rgba(0,168,107,.4)}
+.p-chip.last{background:rgba(255,92,0,.2);color:var(--orange);border:1px solid rgba(255,92,0,.5);animation:pulse-chip 1s infinite}
+@keyframes pulse-chip{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.p-chip .status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dot-wait{background:var(--muted)}
+.dot-done{background:var(--green)}
+.dot-last{background:var(--orange);animation:pulse-chip 1s infinite}
 
-/* FINAL moderator */
-#final-screen { background: var(--gray-900); color: white; padding: 2rem; overflow-y: auto; }
-.final-inner { max-width: 720px; margin: 0 auto; }
-.final-inner h1 { font-size: 2rem; font-weight: 800; text-align: center; margin-bottom: .4rem; }
-.final-subtitle { text-align: center; color: #6b7280; margin-bottom: 2rem; font-size: .95rem; }
-.podium { display: flex; gap: 1rem; margin-bottom: 2.5rem; justify-content: center; flex-wrap: wrap; }
-.podium-item { text-align: center; padding: 1.2rem 1.5rem; border-radius: 14px; min-width: 130px; }
-.podium-item.fastest { background: #78350f; border: 2px solid #f59e0b; }
-.podium-item.slowest { background: #1a1f2e; border: 2px solid #374151; }
-.podium-emoji { font-size: 2.2rem; margin-bottom: .3rem; }
-.podium-name { font-weight: 700; font-size: 1rem; }
-.podium-label { font-size: .75rem; color: #9ca3af; margin-top: .2rem; }
-.summary-section-title { font-size: .85rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 1rem; }
-.summary-item { margin-bottom: 1rem; background: #1f2937; border-radius: 10px; padding: 1rem; }
-.summary-q { font-size: .85rem; color: #9ca3af; margin-bottom: .6rem; font-weight: 500; }
-.summary-bar-item { margin-bottom: .35rem; }
-.summary-bar-label { font-size: .75rem; color: #d1d5db; margin-bottom: .2rem; display: flex; justify-content: space-between; }
-.summary-bar-track { height: 14px; background: #374151; border-radius: 4px; overflow: hidden; }
-.summary-bar-fill { height: 100%; background: var(--blue); border-radius: 4px; transition: width .6s; }
+/* mod actions */
+.mod-actions{padding:1rem;border-top:1px solid #2A3F5F;flex-shrink:0}
+.mod-act-btn{width:100%;padding:.9rem;border:none;border-radius:12px;font-size:.95rem;font-weight:800;cursor:pointer;transition:opacity .15s,transform .1s;margin-bottom:.5rem;letter-spacing:.01em}
+.mod-act-btn:hover{opacity:.88;transform:translateY(-1px)}
+.mod-act-btn:last-child{margin-bottom:0}
+.mod-act-btn.green{background:linear-gradient(135deg,var(--green),#007A4D);color:white}
+.mod-act-btn.blue{background:linear-gradient(135deg,var(--blue),#0E36A8);color:white}
+.mod-act-btn.purple{background:linear-gradient(135deg,var(--purple),#3D1670);color:white}
+.mod-act-btn:disabled{background:#2A3F5F;color:var(--muted);cursor:default;transform:none}
 
-/* PARTICIPANT FINAL */
-#p-final-screen { align-items: center; justify-content: center; background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%); }
-.p-final-card { background: white; border-radius: 20px; padding: 2.5rem; max-width: 380px; width: 90%; text-align: center; }
-.p-final-card h2 { font-size: 1.4rem; font-weight: 700; color: var(--gray-900); margin-bottom: .4rem; }
-.p-final-card p { color: var(--gray-500); font-size: .95rem; }
+/* ── FINAL (moderator) ── */
+#final-screen{background:var(--dark);overflow-y:auto;justify-content:flex-start;padding:2rem}
+.final-inner{max-width:780px;margin:0 auto}
+.final-title{font-size:2.5rem;font-weight:900;text-align:center;margin-bottom:.4rem;background:linear-gradient(135deg,var(--yellow),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.final-sub{text-align:center;color:var(--muted);font-size:.95rem;margin-bottom:2.5rem}
+.trophies{display:flex;gap:1.2rem;justify-content:center;margin-bottom:3rem;flex-wrap:wrap}
+.trophy-card{padding:1.5rem 2rem;border-radius:18px;text-align:center;min-width:160px}
+.trophy-card.gold{background:linear-gradient(135deg,#78350F,#451A03);border:2px solid var(--yellow)}
+.trophy-card.turtle{background:linear-gradient(135deg,#1E2E44,#0D1B2A);border:2px solid #2A3F5F}
+.trophy-emoji{font-size:2.8rem;margin-bottom:.5rem}
+.trophy-name{font-size:1.1rem;font-weight:800;margin-bottom:.25rem}
+.trophy-label{font-size:.75rem;color:var(--muted)}
+.summary-heading{font-size:.85rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:1.2rem}
+.sum-item{background:var(--dark2);border:1px solid #2A3F5F;border-radius:14px;padding:1.2rem;margin-bottom:1rem}
+.sum-q{font-size:.88rem;color:var(--muted);margin-bottom:.75rem;font-weight:600}
+.sum-bar-row{margin-bottom:.4rem}
+.sum-bar-label{font-size:.75rem;color:var(--text);margin-bottom:.2rem;display:flex;justify-content:space-between}
+.sum-bar-track{height:14px;background:var(--dark3);border-radius:4px;overflow:hidden}
+.sum-bar-fill{height:100%;border-radius:4px;transition:width .6s ease}
+
+/* ── PARTICIPANT FINAL ── */
+#p-final-screen{align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1B3A7A 0%,var(--dark) 70%)}
+.p-final-card{background:var(--dark2);border:1px solid #2A3F5F;border-radius:20px;padding:3rem 2rem;text-align:center;max-width:360px;width:90%}
+.p-final-card h2{font-size:1.6rem;font-weight:900;margin-bottom:.4rem}
+.p-final-card p{color:var(--muted);font-size:.95rem}
 
 /* TOAST */
-.toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: #111; color: white; padding: .75rem 1.5rem; border-radius: 10px; font-size: .9rem; z-index: 100; opacity: 0; transition: opacity .3s; pointer-events: none; white-space: nowrap; }
-.toast.show { opacity: 1; }
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:#1E2E44;color:white;padding:.75rem 1.5rem;border-radius:12px;font-size:.9rem;z-index:200;opacity:0;transition:opacity .3s;pointer-events:none;border:1px solid #2A3F5F;white-space:nowrap}
+.toast.show{opacity:1}
 
-@media (max-width: 640px) {
-  #mod-screen { flex-direction: column; }
-  .mod-right { width: 100%; border-left: none; border-top: 1px solid #374151; max-height: 200px; }
+@media(max-width:700px){
+  #mod-screen{flex-direction:column}
+  .mod-right{width:100%;border-left:none;border-top:1px solid #2A3F5F;max-height:240px}
+  .opts-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
-<!-- ROLE SELECT -->
+<!-- ROLE -->
 <div id="role-screen" class="screen active">
   <div class="role-card">
-    <h1>Nadace Digital Quest</h1>
-    <p class="subtitle">Průzkum komunikace a digitálních nástrojů</p>
-    <button class="role-btn primary" onclick="showModerator()">🎙️ Jsem moderátor</button>
-    <button class="role-btn" onclick="showJoin()">🙋 Jsem účastník</button>
+    <div class="role-logo">Nadace Digital Quest</div>
+    <p class="role-sub">Průzkum komunikace a digitálních nástrojů</p>
+    <button class="role-btn mod" onclick="showModerator()">🎙️ Jsem moderátor</button>
+    <button class="role-btn part" onclick="showJoin()">🙋 Jsem účastník</button>
   </div>
 </div>
 
 <!-- JOIN -->
 <div id="join-screen" class="screen">
-  <div class="join-card">
-    <h2>Připojit se ke hře</h2>
-    <p>Zadej kód session z moderátorské obrazovky</p>
-    <input type="text" id="code-input" class="code-input" placeholder="MODRÝ-KAPR" maxlength="20" autocomplete="off" oninput="this.value=this.value.toUpperCase()">
-    <div class="join-divider">a své jméno</div>
-    <input type="text" id="name-input" placeholder="Tvoje jméno nebo přezdívka" maxlength="20" autocomplete="off">
-    <button onclick="joinSession()">Připojit se →</button>
-    <div style="margin-top:1rem;font-size:.8rem;color:#9ca3af">Kód najdeš na sdílené obrazovce moderátora</div>
+  <div class="join-card" style="margin:auto">
+    <h2>Připojit se</h2>
+    <p>Zadej kód ze sdílené obrazovky</p>
+    <input type="text" id="code-input" class="join-input code" placeholder="ZLATÝ-KAPR" maxlength="25" oninput="this.value=this.value.toUpperCase()" autocomplete="off">
+    <input type="text" id="name-input" class="join-input" placeholder="Tvoje jméno nebo přezdívka" maxlength="20" autocomplete="off">
+    <button class="join-btn" onclick="joinSession()">Připojit se →</button>
+    <p style="margin-top:1rem;font-size:.78rem;color:var(--muted)">Kód najdeš na sdílené obrazovce moderátora</p>
   </div>
 </div>
 
-<!-- WAITING -->
+<!-- WAITING participant -->
 <div id="waiting-screen" class="screen">
-  <div style="flex:1;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1e3a5f,#2563eb)">
+  <div style="margin:auto">
     <div class="waiting-card">
-      <h2>Jsi v!</h2>
-      <div class="pulse-dot"></div>
-      <p>Čekej na moderátora — dotazník brzy začne</p>
-      <div class="name-badge" id="my-name-badge"></div>
-      <div class="code-badge" id="my-code-badge"></div>
+      <h2>Jsi v! 🎉</h2>
+      <span class="bounce-emoji">🐟</span>
+      <p>Čekej na moderátora — začínáme brzy</p>
+      <div class="name-pill" id="my-name-badge"></div><br>
+      <div class="code-pill" id="my-code-badge"></div>
     </div>
   </div>
 </div>
 
-<!-- QUESTION (participant) -->
+<!-- QUESTION participant -->
 <div id="question-screen" class="screen">
-  <div class="q-header">
-    <div class="block-name" id="p-block-name"></div>
-    <div class="q-num" id="p-q-num"></div>
-    <div class="q-text" id="p-q-text"></div>
-    <span class="q-type-badge" id="p-q-type"></span>
+  <div class="q-topbar">
+    <span class="block-tag" id="p-block-name"></span>
+    <span class="q-counter" id="p-q-num"></span>
   </div>
-  <div class="options-grid" id="p-options"></div>
-  <div class="submit-area">
+  <div class="q-progress"><div class="q-progress-fill" id="p-progress" style="width:0%"></div></div>
+  <div class="q-body">
+    <div class="q-text" id="p-q-text"></div>
+    <span class="q-type-tag" id="p-q-type"></span>
+  </div>
+  <div class="opts-grid" id="p-options"></div>
+  <div class="submit-wrap">
     <button class="submit-btn" id="submit-btn" disabled onclick="submitAnswer()">Odeslat odpověď</button>
   </div>
 </div>
 
 <!-- ANSWERED -->
 <div id="answered-screen" class="screen">
-  <div style="flex:1;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1e3a5f,#2563eb)">
+  <div style="margin:auto">
     <div class="answered-card">
-      <div style="font-size:3rem;margin-bottom:.5rem">✅</div>
-      <h2 style="color:#1f2937;font-size:1.2rem;font-weight:700;margin-bottom:.4rem">Odpověď odeslána!</h2>
-      <p style="color:#6b7280;font-size:.9rem">Čekej na moderátora...</p>
-      <div class="pulse-dot" style="margin-top:1.5rem"></div>
+      <span class="check-anim">✅</span>
+      <h2 style="font-size:1.3rem;margin:.5rem 0 .4rem">Odesláno!</h2>
+      <p style="color:var(--muted);font-size:.9rem">Čekej na moderátora...</p>
+      <span class="bounce-emoji" style="font-size:1.8rem;margin-top:.5rem">⏳</span>
     </div>
   </div>
 </div>
 
 <!-- MODERATOR -->
 <div id="mod-screen" class="screen">
+  <!-- LEFT -->
   <div class="mod-left">
-    <div class="mod-top">
+    <div class="mod-topbar">
       <h1>Nadace Digital Quest — moderátor</h1>
-      <div class="session-code-display" id="session-code-display">—</div>
+      <div class="mod-code" id="mod-code-display">—</div>
     </div>
-    <div class="progress-bar"><div class="progress-fill" id="mod-progress" style="width:0%"></div></div>
-    <div id="mod-content" style="flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden"></div>
+    <div class="mod-progress"><div class="mod-progress-fill" id="mod-progress" style="width:0%"></div></div>
+    <div class="mod-content" id="mod-content"></div>
   </div>
+  <!-- RIGHT -->
   <div class="mod-right">
-    <div>
-      <div class="answered-count" id="answered-count">0</div>
-      <div class="answered-label" id="answered-label">připojeno</div>
-      <h3 id="right-panel-title">Účastníci</h3>
+    <div class="mod-right-top">
+      <div class="mod-answered-big" id="mod-ans-count">0</div>
+      <div class="mod-answered-label" id="mod-ans-label">účastníků připojeno</div>
+      <div class="waiting-on" id="waiting-on-msg"></div>
     </div>
-    <div class="waiting-list" id="waiting-list"></div>
-    <div id="mod-actions"></div>
+    <div class="participants-grid" id="participants-grid"></div>
+    <div class="mod-actions" id="mod-actions"></div>
   </div>
 </div>
 
-<!-- FINAL (moderator) -->
+<!-- FINAL moderator -->
 <div id="final-screen" class="screen">
   <div class="final-inner">
-    <h1>🏁 Výsledky průzkumu</h1>
-    <p class="final-subtitle">Nadace Digital Quest — souhrn všech odpovědí</p>
-    <div class="podium" id="podium"></div>
-    <div class="summary-section-title">Přehled všech otázek</div>
+    <div class="final-title">Výsledky průzkumu</div>
+    <p class="final-sub">Nadace Digital Quest — souhrn všech odpovědí</p>
+    <div class="trophies" id="trophies"></div>
+    <div class="summary-heading">Přehled všech otázek</div>
     <div id="final-summary"></div>
   </div>
 </div>
 
 <!-- PARTICIPANT FINAL -->
 <div id="p-final-screen" class="screen">
-  <div class="p-final-card">
-    <h2>Hotovo! 🎉</h2>
-    <div style="font-size:3rem;margin:1rem 0">🙌</div>
-    <p>Díky za vyplnění.<br>Výsledky uvidíš na sdílené obrazovce.</p>
+  <div class="p-final-card" style="margin:auto">
+    <div style="font-size:3.5rem;margin-bottom:.75rem">🏆</div>
+    <h2>Hotovo!</h2>
+    <p style="margin-top:.5rem">Díky za vyplnění.<br>Výsledky sleduj na sdílené obrazovce.</p>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const SUPABASE_URL = 'https://zzyftqgvsnhmjhcljfft.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp6eWZ0cWd2c25obWpoY2xqZmZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMzgyNzMsImV4cCI6MjA5MzgxNDI3M30.Arv9nqzmSs8fo0HCq3cK9HteQDKeeDf8f_y07jHp-us';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL='https://zzyftqgvsnhmjhcljfft.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp6eWZ0cWd2c25obWpoY2xqZmZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMzgyNzMsImV4cCI6MjA5MzgxNDI3M30.Arv9nqzmSs8fo0HCq3cK9HteQDKeeDf8f_y07jHp-us';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-// Session code generator — vtipné české dvojice
-const ADJECTIVES = ['MODRÝ','RYCHLÁ','ZLATÝ','DIVOKÁ','TUČNÝ','MALÁ','BÍLÝ','CHYTRÁ','LÍNÝ','VESELÁ','STATNÝ','ŠIKOVNÁ','TAJNÝ','HLADOVÝ','ŠŤASTNÝ'];
-const NOUNS = ['KAPR','LIŠKA','MEDVĚD','SOVA','HROCH','KOZA','VLAK','ROBOT','KAFÉ','DATLA','JEŽEK','PÁREK','TRAKTOR','BOBR','KOLÁČ'];
-function generateCode() {
-  const a = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
-  const n = NOUNS[Math.floor(Math.random() * NOUNS.length)];
-  return a + '-' + n;
-}
+const ADJECTIVES=['MODRÝ','RYCHLÁ','ZLATÝ','DIVOKÁ','TUČNÝ','MALÁ','BÍLÝ','CHYTRÁ','LÍNÝ','VESELÁ','STATNÝ','ŠIKOVNÁ','TAJNÝ','HLADOVÝ','ŠŤASTNÝ','MAZANÁ'];
+const NOUNS=['KAPR','LIŠKA','MEDVĚD','SOVA','HROCH','KOZA','VLAK','ROBOT','KAFÉ','DATLA','JEŽEK','PÁREK','TRAKTOR','BOBR','KOLÁČ','DELFÍN'];
+function genCode(){return ADJECTIVES[Math.floor(Math.random()*ADJECTIVES.length)]+'-'+NOUNS[Math.floor(Math.random()*NOUNS.length)]}
 
-const QUESTIONS = [
-  {block:"Nástroje — přehled", q:"Které digitální nástroje používáš pro každodenní práci?", multi:true, opts:["MS Teams — Chats","MS Teams — Týmové kanály","MS Teams — Whiteboard","MS Teams — Úkoly","MS Teams — Pracovní postupy","Planner","Outlook (e-mail, kalendář)","SharePoint / OneDrive","OneNote / Poznámky","Copilot","AI nástroje (Claude, ChatGPT, Perplexity…)","Slack","Excel / Word offline","Papír, poznámkový blok","Jiné"]},
-  {block:"Nástroje — přehled", q:"Jak hodnotíš svou celkovou digitální orientaci?", multi:false, opts:["Pohybuji se ve všem snadno","Občas potřebuji dohledat, ale zvládám","Potřebuji pomoc s řadou věcí","Digitální nástroje mi dělají výrazné potíže"]},
-  {block:"MS Teams — využití", q:"K čemu Teams nejčastěji používáš?", multi:true, opts:["Videohovory (schůzky)","Chat 1:1 (Chats)","Týmové kanály","Sdílení a komentování souborů","Planner / Úkoly","Whiteboard","Pracovní postupy (automatizace)","Teams zatím nepoužívám"]},
-  {block:"MS Teams — využití", q:"Jak často aktivně přispíváš do Teams kanálů?", multi:false, opts:["Každý den","Několikrát týdně","Jednou týdně nebo méně","Téměř nikdy"]},
-  {block:"MS Teams — využití", q:"Jak ti dnes vyhovuje struktura kanálů v Teams?", multi:false, opts:["Ano, orientuji se dobře","Ještě jsem si na to nezvykl/a, ale chápu logiku","Nevím, co kde hledat","Teams zatím moc nepoužívám"]},
-  {block:"Asynchronní komunikace", q:"Kdy nejčastěji čteš zprávy a e-maily?", multi:false, opts:["Průběžně celý den (notifikace)","Ráno a pak ještě jednou odpoledne","V pevně stanovených blocích","Bez systému — kdy mi to přijde"]},
-  {block:"Asynchronní komunikace", q:"Co ti vadí v asynchronní komunikaci?", multi:true, opts:["Nevím, kdy očekávat odpověď","Zprávy se ztrácejí nebo zapadnou","Příliš mnoho kanálů ke sledování","Urgentní věci řeším asynchronně","Kolegové nereagují včas","Chybí jasná pravidla","Ostatní to nepoužívají — nemáme sdílená pravidla","Nic — funguje mi to dobře"]},
-  {block:"Asynchronní komunikace", q:"Co ti vadí v synchronní komunikaci?", multi:true, opts:["Příliš mnoho schůzek, málo prostoru na práci","Schůzky bez agendy nebo jasného cíle","Schůzky mohly být zpráva nebo e-mail","Obtížné domluvit termín kdy jsou všichni dostupní","Technické problémy (zvuk, připojení)","Lidé se nepřipravují nebo jsou nepozorní","Nic — synchronní komunikace mi vyhovuje"]},
-  {block:"Asynchronní komunikace", q:"Co ti na synchronní komunikaci vyhovuje?", multi:true, opts:["Osobní standup — rychlý přehled co kdo řeší","Prezenční status meetingy — lépe se domluvíme","Možnost okamžitě reagovat a vyjasnit si věci","Sdílení obrazovky usnadňuje spolupráci","Pravidelné schůzky dávají rytmus týdnu","Videohovory nahrazují cestování","Nic z toho mi nevyhovuje"]},
-  {block:"Asynchronní komunikace", q:"Jak rychle odpovídáš na Teams zprávu (bez urgence)?", multi:false, opts:["Do hodiny","Do konce pracovního dne","Do druhého dne","Záleží na situaci, nemám pravidlo"]},
-  {block:"Meetingy", q:"Kolik hodin týdně strávíš na schůzkách?", multi:false, opts:["Do 3 hodin","3–6 hodin","6–10 hodin","10–20 hodin","20–30 hodin","Více než 30 hodin"]},
-  {block:"Meetingy", q:"Co nejčastěji chybí na schůzkách ve tvém týmu?", multi:true, opts:["Agenda předem","Jasný cíl / očekávaný výstup","Zápis nebo akční body po schůzce","Správní lidé (přezvání nebo chybějící)","Schůzky by šlo nahradit asynchronně","Nic — schůzky jsou OK"]},
-  {block:"Sdílení informací", q:"Kde nejčastěji hledáš pracovní dokumenty a zadání?", multi:true, opts:["SharePoint / OneDrive","Starší e-maily","Teams kanály","Zeptám se kolegy přímo","Interní wiki nebo Google","Nemám systém — hledám kde co je"]},
-  {block:"Sdílení informací", q:"Jak hodnotíš přehlednost sdílených dokumentů?", multi:false, opts:["Výborně — vždy najdu co potřebuji","Průměrně — většinou najdu, ale trvá to","Špatně — nevím kde co je","Nesdílíme dokumenty systematicky"]},
-  {block:"Bolesti a potřeby", q:"Co ti bere nejvíce energie v digitální komunikaci?", multi:true, opts:["Duplicitní kanály (stejná věc na více místech)","Přepínání mezi mnoha nástroji","Nejasné co je urgentní","Neinformovanost — dozvím se věci pozdě","Zbytečné notifikace a ping kultura","Nedostatečná dokumentace rozhodnutí","Ostatní to nepoužívají — nemáme sdílená pravidla","Jiné"]},
-  {block:"Bolesti a potřeby", q:"Co by ti nejvíce pomohlo ke kvalitnější spolupráci?", multi:true, opts:["Jasná pravidla co patří kam","Domluvené reakční doby","Lepší struktura kanálů v Teams","Sdílené zásady pro meetingy","Školení nebo onboarding k nástrojům","Méně nástrojů — konsolidace","Víc asynchronní práce, méně schůzek"]},
-  {block:"Kultura komunikace", q:"Jak vnímáš očekávání dostupnosti mimo pracovní dobu?", multi:false, opts:["Jsem dostupný/á 24/7, je to standard","Občas reaguji, ale vlastní volbou","Striktně nereaguji mimo pracovní dobu","Cítím tlak reagovat, i když nechci"]},
-  {block:"Kultura komunikace", q:"Jak statusy dostupnosti fungují ve tvém týmu?", multi:false, opts:["Nastavujeme pravidelně a pomáhá to","Nastavujeme sporadicky","Nepoužíváme je","Nevím co je status v Teams"]},
-  {block:"Řízení práce", q:"Jak eviduješ své úkoly a projekty?", multi:true, opts:["Planner (MS Teams)","To Do / Úkoly (MS Teams)","SharePoint seznam","Excel nebo Word tabulka","Papírový seznam / fyzický diář","V hlavě — nemám systém","Jiný nástroj"]},
-  {block:"Řízení práce", q:"Jak váš tým sdílí status projektů a úkolů?", multi:false, opts:["Máme sdílený nástroj a aktualizujeme ho pravidelně","Sdílíme neformálně — na schůzkách nebo přes zprávy","Každý má svůj systém, sdílení funguje špatně","Nesdílíme — status projektů není průhledný"]},
-  {block:"Řízení práce", q:"Kolik času týdně strávíš reportingem nebo zjišťováním statusu?", multi:false, opts:["Do 1 hodiny","1–3 hodiny","3–5 hodin","Více než 5 hodin"]},
-  {block:"Řízení práce", q:"Jak dobře máš přehled o práci kolegů?", multi:false, opts:["Výborně — vím co kdo řeší","Rámcově — vím jen o hlavních věcech","Špatně — často nevím na čem tým pracuje","Vůbec — každý pracuje izolovaně"]},
-  {block:"Scénáře", q:"Potřebuješ schválit finální objednávku projektu. Jaký nástroj použiješ?", multi:false, opts:["E-mail s dokumentem v příloze","Počkám na nejbližší status meeting","MS Teams Chat 1:1","MS Teams — kanál projektu s komentářem","SharePoint — schválení přímo v dokumentu","Osobně / telefonicky"]},
-  {block:"Scénáře", q:"Potřebuješ od všech posbírat velikost triček. Jaký kanál zvolíš?", multi:false, opts:["E-mail celé Nadaci","MS Teams — zpráva do obecného kanálu","MS Teams — anketa nebo formulář v kanálu","Formulář (Forms) + odkaz přes Teams nebo e-mail","Sdělím na celoteamové schůzce","Postupně se zeptám každého osobně"]},
-  {block:"Scénáře", q:"Potřebuješ najít aktuální čerpání rozpočtu projektu. Kde začneš?", multi:false, opts:["SharePoint — hledám ve složce projektu","Outlook — prohledám starší e-maily","Zeptám se Háni","MS Teams — kanál projektu nebo chat","Planner nebo jiný nástroj projektu","Nemám tušení kde to hledat"]},
-  {block:"Rozvoj a očekávání", q:"V čem se chceš v práci s digitálními nástroji zlepšit?", multi:true, opts:["Lépe využívat Teams kanály","Zapojit AI nástroje do práce","Zefektivnit správu úkolů a projektů","Naučit se pracovat s Copilot","Lépe strukturovat asynchronní komunikaci","Omezit zbytečné schůzky","Zlepšit práci se sdílenými dokumenty","Nic — jsem spokojený/á"]},
-  {block:"Rozvoj a očekávání", q:"Co chceš aby bylo součástí sdílených komunikačních pravidel?", multi:true, opts:["Pravidla pro Teams kanály vs. chat vs. e-mail","Domluvené reakční doby","Zásady pro schůzky (agenda, zápis, akční body)","Pravidla pro označování urgentnosti","Statusy dostupnosti a jejich používání","Sdílený systém pro evidenci úkolů","Pravidla pro práci s dokumenty","Etiketa a kultura online komunikace"]},
+const FISH_COLORS=['#1B4FD8','#00A86B','#E8175D','#FF5C00','#7B2FBE','#00C4B4','#FFD600','#C0392B','#2E86C1','#1E8449'];
+const FISH_ICONS=['🐟','🐠','🐡','🦈','🐬','🦑','🦐','🐙','🦀','🐋'];
+const BAR_COLORS=['#1B4FD8','#00A86B','#E8175D','#FF5C00','#7B2FBE','#00C4B4','#FFD600','#C0392B','#2E86C1','#1E8449','#884EA0','#D35400','#148F77','#1A5276','#6E2FBE'];
+
+const QUESTIONS=[
+  {block:"Nástroje — přehled",q:"Které digitální nástroje používáš pro každodenní práci?",multi:true,opts:["MS Teams — Chats","MS Teams — Týmové kanály","MS Teams — Whiteboard","MS Teams — Úkoly","MS Teams — Pracovní postupy","Planner","Outlook (e-mail, kalendář)","SharePoint / OneDrive","OneNote / Poznámky","Copilot","AI nástroje (Claude, ChatGPT, Perplexity…)","Slack","Excel / Word offline","Papír, poznámkový blok","Jiné"]},
+  {block:"Nástroje — přehled",q:"Jak hodnotíš svou celkovou digitální orientaci?",multi:false,opts:["Pohybuji se ve všem snadno","Občas potřebuji dohledat, ale zvládám","Potřebuji pomoc s řadou věcí","Digitální nástroje mi dělají výrazné potíže"]},
+  {block:"MS Teams — využití",q:"K čemu Teams nejčastěji používáš?",multi:true,opts:["Videohovory (schůzky)","Chat 1:1 (Chats)","Týmové kanály","Sdílení a komentování souborů","Planner / Úkoly","Whiteboard","Pracovní postupy (automatizace)","Teams zatím nepoužívám"]},
+  {block:"MS Teams — využití",q:"Jak často aktivně přispíváš do Teams kanálů?",multi:false,opts:["Každý den","Několikrát týdně","Jednou týdně nebo méně","Téměř nikdy"]},
+  {block:"MS Teams — využití",q:"Jak ti dnes vyhovuje struktura kanálů v Teams?",multi:false,opts:["Ano, orientuji se dobře","Ještě jsem si na to nezvykl/a, ale chápu logiku","Nevím, co kde hledat","Teams zatím moc nepoužívám"]},
+  {block:"Asynchronní komunikace",q:"Kdy nejčastěji čteš zprávy a e-maily?",multi:false,opts:["Průběžně celý den (notifikace)","Ráno a pak ještě jednou odpoledne","V pevně stanovených blocích","Bez systému — kdy mi to přijde"]},
+  {block:"Asynchronní komunikace",q:"Co ti vadí v asynchronní komunikaci?",multi:true,opts:["Nevím, kdy očekávat odpověď","Zprávy se ztrácejí nebo zapadnou","Příliš mnoho kanálů ke sledování","Urgentní věci řeším asynchronně","Kolegové nereagují včas","Chybí jasná pravidla","Ostatní to nepoužívají — nemáme sdílená pravidla","Nic — funguje mi to dobře"]},
+  {block:"Asynchronní komunikace",q:"Co ti vadí v synchronní komunikaci?",multi:true,opts:["Příliš mnoho schůzek, málo prostoru na práci","Schůzky bez agendy nebo jasného cíle","Schůzky mohly být zpráva nebo e-mail","Obtížné domluvit termín kdy jsou všichni dostupní","Technické problémy (zvuk, připojení)","Lidé se nepřipravují nebo jsou nepozorní","Nic — synchronní komunikace mi vyhovuje"]},
+  {block:"Asynchronní komunikace",q:"Co ti na synchronní komunikaci vyhovuje?",multi:true,opts:["Osobní standup — rychlý přehled co kdo řeší","Prezenční status meetingy — lépe se domluvíme","Možnost okamžitě reagovat a vyjasnit si věci","Sdílení obrazovky usnadňuje spolupráci","Pravidelné schůzky dávají rytmus týdnu","Videohovory nahrazují cestování","Nic z toho mi nevyhovuje"]},
+  {block:"Asynchronní komunikace",q:"Jak rychle odpovídáš na Teams zprávu (bez urgence)?",multi:false,opts:["Do hodiny","Do konce pracovního dne","Do druhého dne","Záleží na situaci, nemám pravidlo"]},
+  {block:"Meetingy",q:"Kolik hodin týdně strávíš na schůzkách?",multi:false,opts:["Do 3 hodin","3–6 hodin","6–10 hodin","10–20 hodin","20–30 hodin","Více než 30 hodin"]},
+  {block:"Meetingy",q:"Co nejčastěji chybí na schůzkách ve tvém týmu?",multi:true,opts:["Agenda předem","Jasný cíl / očekávaný výstup","Zápis nebo akční body po schůzce","Správní lidé (přezvání nebo chybějící)","Schůzky by šlo nahradit asynchronně","Nic — schůzky jsou OK"]},
+  {block:"Sdílení informací",q:"Kde nejčastěji hledáš pracovní dokumenty a zadání?",multi:true,opts:["SharePoint / OneDrive","Starší e-maily","Teams kanály","Zeptám se kolegy přímo","Interní wiki nebo Google","Nemám systém — hledám kde co je"]},
+  {block:"Sdílení informací",q:"Jak hodnotíš přehlednost sdílených dokumentů?",multi:false,opts:["Výborně — vždy najdu co potřebuji","Průměrně — většinou najdu, ale trvá to","Špatně — nevím kde co je","Nesdílíme dokumenty systematicky"]},
+  {block:"Bolesti a potřeby",q:"Co ti bere nejvíce energie v digitální komunikaci?",multi:true,opts:["Duplicitní kanály (stejná věc na více místech)","Přepínání mezi mnoha nástroji","Nejasné co je urgentní","Neinformovanost — dozvím se věci pozdě","Zbytečné notifikace a ping kultura","Nedostatečná dokumentace rozhodnutí","Ostatní to nepoužívají — nemáme sdílená pravidla","Jiné"]},
+  {block:"Bolesti a potřeby",q:"Co by ti nejvíce pomohlo ke kvalitnější spolupráci?",multi:true,opts:["Jasná pravidla co patří kam","Domluvené reakční doby","Lepší struktura kanálů v Teams","Sdílené zásady pro meetingy","Školení nebo onboarding k nástrojům","Méně nástrojů — konsolidace","Víc asynchronní práce, méně schůzek"]},
+  {block:"Kultura komunikace",q:"Jak vnímáš očekávání dostupnosti mimo pracovní dobu?",multi:false,opts:["Jsem dostupný/á 24/7, je to standard","Občas reaguji, ale vlastní volbou","Striktně nereaguji mimo pracovní dobu","Cítím tlak reagovat, i když nechci"]},
+  {block:"Kultura komunikace",q:"Jak statusy dostupnosti fungují ve tvém týmu?",multi:false,opts:["Nastavujeme pravidelně a pomáhá to","Nastavujeme sporadicky","Nepoužíváme je","Nevím co je status v Teams"]},
+  {block:"Řízení práce",q:"Jak eviduješ své úkoly a projekty?",multi:true,opts:["Planner (MS Teams)","To Do / Úkoly (MS Teams)","SharePoint seznam","Excel nebo Word tabulka","Papírový seznam / fyzický diář","V hlavě — nemám systém","Jiný nástroj"]},
+  {block:"Řízení práce",q:"Jak váš tým sdílí status projektů a úkolů?",multi:false,opts:["Máme sdílený nástroj a aktualizujeme ho pravidelně","Sdílíme neformálně — na schůzkách nebo přes zprávy","Každý má svůj systém, sdílení funguje špatně","Nesdílíme — status projektů není průhledný"]},
+  {block:"Řízení práce",q:"Kolik času týdně strávíš reportingem nebo zjišťováním statusu?",multi:false,opts:["Do 1 hodiny","1–3 hodiny","3–5 hodin","Více než 5 hodin"]},
+  {block:"Řízení práce",q:"Jak dobře máš přehled o práci kolegů?",multi:false,opts:["Výborně — vím co kdo řeší","Rámcově — vím jen o hlavních věcech","Špatně — často nevím na čem tým pracuje","Vůbec — každý pracuje izolovaně"]},
+  {block:"Scénáře",q:"Potřebuješ schválit finální objednávku projektu. Jaký nástroj použiješ?",multi:false,opts:["E-mail s dokumentem v příloze","Počkám na nejbližší status meeting","MS Teams Chat 1:1","MS Teams — kanál projektu s komentářem","SharePoint — schválení přímo v dokumentu","Osobně / telefonicky"]},
+  {block:"Scénáře",q:"Potřebuješ od všech posbírat velikost triček. Jaký kanál zvolíš?",multi:false,opts:["E-mail celé Nadaci","MS Teams — zpráva do obecného kanálu","MS Teams — anketa nebo formulář v kanálu","Formulář (Forms) + odkaz přes Teams nebo e-mail","Sdělím na celoteamové schůzce","Postupně se zeptám každého osobně"]},
+  {block:"Scénáře",q:"Potřebuješ najít aktuální čerpání rozpočtu projektu. Kde začneš?",multi:false,opts:["SharePoint — hledám ve složce projektu","Outlook — prohledám starší e-maily","Zeptám se Háni","MS Teams — kanál projektu nebo chat","Planner nebo jiný nástroj projektu","Nemám tušení kde to hledat"]},
+  {block:"Rozvoj a očekávání",q:"V čem se chceš v práci s digitálními nástroji zlepšit?",multi:true,opts:["Lépe využívat Teams kanály","Zapojit AI nástroje do práce","Zefektivnit správu úkolů a projektů","Naučit se pracovat s Copilot","Lépe strukturovat asynchronní komunikaci","Omezit zbytečné schůzky","Zlepšit práci se sdílenými dokumenty","Nic — jsem spokojený/á"]},
+  {block:"Rozvoj a očekávání",q:"Co chceš aby bylo součástí sdílených komunikačních pravidel?",multi:true,opts:["Pravidla pro Teams kanály vs. chat vs. e-mail","Domluvené reakční doby","Zásady pro schůzky (agenda, zápis, akční body)","Pravidla pro označování urgentnosti","Statusy dostupnosti a jejich používání","Sdílený systém pro evidenci úkolů","Pravidla pro práci s dokumenty","Etiketa a kultura online komunikace"]},
 ];
 
 // STATE
-let role = null;
-let sessionId = null;
-let sessionCode = null;
-let participantId = null;
-let myName = null;
-let currentQ = 0;
-let phase = 'lobby';
-let participants = {};
-let answeredThisQ = new Set();
-let selectedOpts = [];
-let subs = [];
+let role=null,sessionId=null,sessionCode=null,participantId=null,myName=null;
+let currentQ=0,phase='lobby';
+let participants={},answeredThisQ=new Set(),selectedOpts=[];
+let fishPositions={};
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-function toast(msg, duration=3000) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), duration);
-}
-function unsub() { subs.forEach(s => { try { s.unsubscribe(); } catch(e){} }); subs = []; }
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+function toast(msg,dur=3000){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur)}
 
 // ── ROLE ──
-function showModerator() { role = 'moderator'; initModerator(); }
-function showJoin() { role = 'participant'; showScreen('join-screen'); setTimeout(() => document.getElementById('code-input').focus(), 100); }
+function showModerator(){role='moderator';initModerator()}
+function showJoin(){role='participant';showScreen('join-screen');setTimeout(()=>document.getElementById('code-input').focus(),100)}
 
 // ── MODERATOR ──
-async function initModerator() {
-  const code = generateCode();
-  sessionCode = code;
-  const { data, error } = await sb.from('sessions').insert({ current_question: 0, phase: 'lobby', code: code }).select().single();
-  if (error) { toast('Chyba připojení k databázi: ' + error.message, 5000); console.error(error); return; }
-  sessionId = data.id;
-  document.getElementById('session-code-display').textContent = code;
+async function initModerator(){
+  const code=genCode();sessionCode=code;
+  const {data,error}=await sb.from('sessions').insert({current_question:0,phase:'lobby',code}).select().single();
+  if(error){toast('Chyba DB: '+error.message,5000);return}
+  sessionId=data.id;
+  document.getElementById('mod-code-display').textContent=code;
   showScreen('mod-screen');
   renderModLobby();
-  subscribeModParticipants();
-}
-
-function subscribeModParticipants() {
-  // Polling — každé 2s fetchuje účastníky a odpovědi přímo z DB
-  // Spolehlivější než Supabase realtime na free tier
   pollModerator();
 }
 
-async function pollModerator() {
-  if (role !== 'moderator' || !sessionId) return;
-
-  // Fetch participants
-  const { data: pData } = await sb.from('participants').select('*').eq('session_id', sessionId);
-  if (pData) {
-    let changed = false;
-    pData.forEach(p => { if (!participants[p.id]) { participants[p.id] = p; changed = true; } });
-    if (changed) {
-      if (phase === 'lobby') renderModLobby();
-      else renderWaitingList();
+async function pollModerator(){
+  if(role!=='moderator'||!sessionId)return;
+  const {data:pData}=await sb.from('participants').select('*').eq('session_id',sessionId);
+  if(pData){
+    let changed=false;
+    pData.forEach(p=>{if(!participants[p.id]){participants[p.id]=p;changed=true}});
+    if(changed){if(phase==='lobby')renderModLobby();else renderParticipantsGrid()}
+  }
+  if(phase==='question'){
+    const {data:aData}=await sb.from('answers').select('participant_id').eq('session_id',sessionId).eq('question_index',currentQ);
+    if(aData){
+      const prev=answeredThisQ.size;
+      aData.forEach(a=>answeredThisQ.add(a.participant_id));
+      if(answeredThisQ.size!==prev){renderParticipantsGrid();updateModActions()}
     }
   }
-
-  // Fetch answers for current question
-  if (phase === 'question') {
-    const { data: aData } = await sb.from('answers').select('participant_id').eq('session_id', sessionId).eq('question_index', currentQ);
-    if (aData) {
-      const prevSize = answeredThisQ.size;
-      aData.forEach(a => answeredThisQ.add(a.participant_id));
-      if (answeredThisQ.size !== prevSize) {
-        renderWaitingList();
-        updateModActionBtn();
-      }
-    }
-  }
-
-  setTimeout(pollModerator, 2000);
+  setTimeout(pollModerator,2000);
 }
 
-function renderModLobby() {
-  const count = Object.keys(participants).length;
-  document.getElementById('mod-progress').style.width = '0%';
-  document.getElementById('answered-count').textContent = count;
-  document.getElementById('answered-label').textContent = 'připojeno';
-  document.getElementById('right-panel-title').textContent = 'Připojení účastníci';
-  document.getElementById('waiting-list').innerHTML = Object.values(participants).map(p =>
-    `<div class="waiting-item"><span class="dot dot-done"></span>${p.name}</div>`).join('');
-  document.getElementById('mod-content').innerHTML = `
-    <div class="lobby-panel">
-      <div style="font-size:.85rem;color:#9ca3af;margin-bottom:.25rem">Kód pro připojení</div>
-      <div class="code-big">${sessionCode}</div>
-      <div class="code-hint">Účastníci zadají tento kód na svém telefonu</div>
-      <div class="participant-count">${count}</div>
-      <div style="color:#9ca3af;font-size:.9rem;margin-bottom:.5rem">účastníků připojeno</div>
-      <div class="lobby-names">${Object.values(participants).map(p => `<span class="name-chip">${p.name}</span>`).join('')}</div>
-      <button class="start-survey-btn" onclick="startSurvey()" ${count === 0 ? 'disabled' : ''}>
-        ${count === 0 ? 'Čekám na účastníky...' : 'Spustit dotazník →'}
+function renderModLobby(){
+  const count=Object.keys(participants).length;
+  document.getElementById('mod-progress').style.width='0%';
+  document.getElementById('mod-ans-count').textContent=count;
+  document.getElementById('mod-ans-label').textContent='účastníků připojeno';
+  document.getElementById('waiting-on-msg').textContent='';
+  renderAquarium();
+  document.getElementById('mod-content').innerHTML=`
+    <div class="lobby-wrap">
+      <div style="font-size:.85rem;color:var(--muted);margin-bottom:.25rem;text-transform:uppercase;letter-spacing:.06em">Kód pro připojení</div>
+      <div class="lobby-code-big">${sessionCode}</div>
+      <div class="lobby-hint">Účastníci zadají tento kód na svém telefonu → <b>${location.href}</b></div>
+      <div class="aquarium" id="aquarium"></div>
+      <div class="lobby-count" id="lobby-count">${count}</div>
+      <div class="lobby-count-label">účastníků připojeno</div>
+      <button class="start-btn" id="start-btn" onclick="startSurvey()" ${count===0?'disabled':''}>
+        ${count===0?'⏳ Čekám na účastníky...':'🚀 Spustit dotazník'}
       </button>
     </div>`;
-  document.getElementById('mod-actions').innerHTML = '';
+  renderAquariumFish();
+  document.getElementById('mod-actions').innerHTML='';
 }
 
-async function startSurvey() {
-  await sb.from('sessions').update({ phase: 'question', current_question: 0, started_at: new Date().toISOString() }).eq('id', sessionId);
-  phase = 'question';
-  currentQ = 0;
-  answeredThisQ = new Set();
+function renderAquariumFish(){
+  const aq=document.getElementById('aquarium');
+  if(!aq)return;
+  aq.innerHTML='';
+  Object.values(participants).forEach((p,i)=>{
+    if(!fishPositions[p.id]){
+      fishPositions[p.id]={
+        top:15+Math.random()*70,
+        duration:8+Math.random()*8,
+        delay:-Math.random()*14,
+        color:FISH_COLORS[i%FISH_COLORS.length],
+        icon:FISH_ICONS[i%FISH_ICONS.length]
+      }
+    }
+    const f=fishPositions[p.id];
+    const el=document.createElement('div');
+    el.className='fish';
+    el.style.cssText=`top:${f.top}%;background:${f.color};animation-duration:${f.duration}s;animation-delay:${f.delay}s`;
+    el.innerHTML=`<span class="fish-icon">${f.icon}</span>${p.name}`;
+    aq.appendChild(el);
+  });
+  const countEl=document.getElementById('lobby-count');
+  if(countEl)countEl.textContent=Object.keys(participants).length;
+  const btn=document.getElementById('start-btn');
+  if(btn){const c=Object.keys(participants).length;btn.disabled=c===0;btn.textContent=c===0?'⏳ Čekám na účastníky...':'🚀 Spustit dotazník ('+c+' hráčů)'}
+}
+
+function renderParticipantsGrid(){
+  const total=Object.keys(participants).length;
+  const answered=answeredThisQ.size;
+  const notYet=Object.values(participants).filter(p=>!answeredThisQ.has(p.id));
+  document.getElementById('mod-ans-count').textContent=answered+'/'+total;
+  document.getElementById('mod-ans-label').textContent='odpovědělo';
+  // Waiting on message
+  const wMsg=document.getElementById('waiting-on-msg');
+  if(notYet.length===0){wMsg.textContent='✅ Všichni odpověděli!';wMsg.style.color='#4ADE80'}
+  else if(notYet.length===1){wMsg.textContent='⏳ Čekáme jen na '+notYet[0].name+'!';wMsg.style.color='var(--orange)'}
+  else if(notYet.length===2){wMsg.textContent='⏳ Čekáme na '+notYet.map(p=>p.name).join(' a ');wMsg.style.color='var(--orange)'}
+  else{wMsg.textContent='⏳ Zbývá '+notYet.length+' odpovědí';wMsg.style.color='var(--muted)'}
+  // Grid chips
+  const grid=document.getElementById('participants-grid');
+  grid.innerHTML=Object.values(participants).map(p=>{
+    const done=answeredThisQ.has(p.id);
+    const isLast=notYet.length===1&&notYet[0]?.id===p.id;
+    const cls=isLast?'last':done?'done':'waiting';
+    const dot=isLast?'dot-last':done?'dot-done':'dot-wait';
+    const icon=isLast?'🔥':done?'✓':'···';
+    return `<div class="p-chip ${cls}"><span class="status-dot ${dot}"></span>${p.name} <span style="font-size:.75rem">${icon}</span></div>`;
+  }).join('');
+}
+
+async function startSurvey(){
+  await sb.from('sessions').update({phase:'question',current_question:0,started_at:new Date().toISOString()}).eq('id',sessionId);
+  phase='question';currentQ=0;answeredThisQ=new Set();
   renderModQuestion();
 }
 
-function renderModQuestion() {
-  const q = QUESTIONS[currentQ];
-  const pct = Math.round((currentQ / QUESTIONS.length) * 100);
-  document.getElementById('mod-progress').style.width = pct + '%';
-  document.getElementById('right-panel-title').textContent = 'Ještě neodpověděli';
-  document.getElementById('answered-label').textContent = 'odpovědělo';
-  renderWaitingList();
-  document.getElementById('mod-content').innerHTML = `
-    <div class="mod-q-block">${q.block}</div>
-    <div class="mod-q-text">${currentQ + 1}. ${q.q}</div>
-    <span class="mod-q-type ${q.multi ? 'multi' : 'single'}">${q.multi ? '✦ Více možností' : '● Jedna odpověď'}</span>
+function renderModQuestion(){
+  const q=QUESTIONS[currentQ];
+  const pct=Math.round((currentQ/QUESTIONS.length)*100);
+  document.getElementById('mod-progress').style.width=pct+'%';
+  renderParticipantsGrid();
+  document.getElementById('mod-content').innerHTML=`
+    <div class="mod-q-block">${q.block} · Otázka ${currentQ+1} z ${QUESTIONS.length}</div>
+    <div class="mod-q-text">${q.q}</div>
+    <span class="mod-q-type ${q.multi?'multi':'single'}">${q.multi?'✦ Více možností':'● Jedna odpověď'}</span>
     <div class="live-bars" id="live-bars">
-      ${q.opts.map((o, i) => `
-        <div class="bar-item">
-          <div class="bar-label"><span>${o}</span><span id="cnt-${i}">0</span></div>
-          <div class="bar-track"><div class="bar-fill" id="bar-${i}" style="width:0%"></div></div>
+      ${q.opts.map((o,i)=>`
+        <div class="bar-row">
+          <div class="bar-opt-label" title="${o}">${o}</div>
+          <div class="bar-track"><div class="bar-fill" id="bar-${i}" style="width:0%;background:${BAR_COLORS[i%BAR_COLORS.length]}"></div></div>
+          <div class="bar-cnt" id="cnt-${i}">0</div>
         </div>`).join('')}
     </div>`;
-  updateModActionBtn();
+  updateModActions();
   pollLiveBars();
 }
 
-function renderWaitingList() {
-  const total = Object.keys(participants).length;
-  const answered = answeredThisQ.size;
-  document.getElementById('answered-count').textContent = answered + '/' + total;
-  const notYet = Object.values(participants).filter(p => !answeredThisQ.has(p.id));
-  const done = Object.values(participants).filter(p => answeredThisQ.has(p.id));
-  document.getElementById('waiting-list').innerHTML =
-    notYet.map(p => `<div class="waiting-item"><span class="dot dot-waiting"></span>${p.name}</div>`).join('') +
-    done.map(p => `<div class="waiting-item"><span class="dot dot-done"></span><span style="color:#6b7280;text-decoration:line-through">${p.name}</span></div>`).join('');
+async function pollLiveBars(){
+  if(phase!=='question')return;
+  const q=QUESTIONS[currentQ];
+  const {data}=await sb.from('answers').select('selected_options').eq('session_id',sessionId).eq('question_index',currentQ);
+  if(data){
+    const counts=Array(q.opts.length).fill(0);
+    data.forEach(a=>a.selected_options.forEach(i=>counts[i]++));
+    const max=Math.max(...counts,1);
+    counts.forEach((c,i)=>{
+      const bar=document.getElementById('bar-'+i);
+      const cnt=document.getElementById('cnt-'+i);
+      if(bar)bar.style.width=Math.round((c/max)*100)+'%';
+      if(cnt)cnt.textContent=c;
+    });
+  }
+  if(phase==='question')setTimeout(pollLiveBars,1800);
 }
 
-function updateModActionBtn() {
-  const total = Object.keys(participants).length;
-  const answered = answeredThisQ.size;
-  const isLast = currentQ >= QUESTIONS.length - 1;
-  document.getElementById('mod-actions').innerHTML = `
-    <button class="mod-btn green" id="results-btn" onclick="showModResults()" ${answered === 0 ? 'disabled' : ''}>
-      Zobrazit výsledky (${answered}/${total})
+function updateModActions(){
+  const total=Object.keys(participants).length;
+  const answered=answeredThisQ.size;
+  document.getElementById('mod-actions').innerHTML=`
+    <button class="mod-act-btn green" onclick="showModResults()" ${answered===0?'disabled':''}>
+      📊 Zobrazit výsledky (${answered}/${total})
     </button>`;
 }
 
-let pollActive = false;
-async function pollLiveBars() {
-  if (phase !== 'question') return;
-  const q = QUESTIONS[currentQ];
-  const { data } = await sb.from('answers').select('selected_options').eq('session_id', sessionId).eq('question_index', currentQ);
-  if (data) {
-    const counts = Array(q.opts.length).fill(0);
-    data.forEach(a => a.selected_options.forEach(i => counts[i]++));
-    const max = Math.max(...counts, 1);
-    counts.forEach((c, i) => {
-      const bar = document.getElementById('bar-' + i);
-      const cnt = document.getElementById('cnt-' + i);
-      if (bar) bar.style.width = Math.round((c / max) * 100) + '%';
-      if (cnt) cnt.textContent = c;
-    });
-  }
-  if (phase === 'question') setTimeout(pollLiveBars, 1500);
-}
+async function showModResults(){
+  phase='results';
+  await sb.from('sessions').update({phase:'results'}).eq('id',sessionId);
+  const q=QUESTIONS[currentQ];
+  const {data}=await sb.from('answers').select('selected_options').eq('session_id',sessionId).eq('question_index',currentQ);
+  const total=Object.keys(participants).length;
+  const counts=Array(q.opts.length).fill(0);
+  (data||[]).forEach(a=>a.selected_options.forEach(i=>counts[i]++));
+  const max=Math.max(...counts,1);
+  const isLast=currentQ>=QUESTIONS.length-1;
 
-async function showModResults() {
-  phase = 'results';
-  await sb.from('sessions').update({ phase: 'results' }).eq('id', sessionId);
-  const q = QUESTIONS[currentQ];
-  const { data } = await sb.from('answers').select('selected_options').eq('session_id', sessionId).eq('question_index', currentQ);
-  const total = Object.keys(participants).length;
-  const counts = Array(q.opts.length).fill(0);
-  (data || []).forEach(a => a.selected_options.forEach(i => counts[i]++));
-  const max = Math.max(...counts, 1);
-  const colors = ['#2563eb','#16a34a','#d97706','#dc2626','#7c3aed','#0d9488','#db2777','#ea580c','#65a30d','#0891b2','#9333ea','#c2410c','#0369a1','#15803d','#b45309'];
-
-  document.getElementById('mod-content').innerHTML = `
-    <div class="mod-q-block">${q.block}</div>
-    <div class="mod-q-text">${currentQ + 1}. ${q.q}</div>
-    <div style="margin-bottom:1rem"></div>
-    <div style="flex:1;overflow-y:auto">
-      ${q.opts.map((o, i) => {
-        const pct = total > 0 ? Math.round((counts[i] / total) * 100) : 0;
-        return `<div class="result-bar-item">
-          <div class="result-bar-label"><span>${o}</span><span>${counts[i]} hlasů (${pct}%)</span></div>
-          <div class="result-bar-track">
-            <div class="result-bar-fill" id="rbar-${i}" style="width:0%;background:${colors[i % colors.length]}">${counts[i] > 0 ? counts[i] : ''}</div>
-          </div>
+  document.getElementById('mod-content').innerHTML=`
+    <div class="mod-q-block">${q.block} · Otázka ${currentQ+1} z ${QUESTIONS.length}</div>
+    <div class="mod-q-text">${q.q}</div>
+    <div style="margin-bottom:1.2rem"></div>
+    <div class="res-bars">
+      ${q.opts.map((o,i)=>{
+        const pct=total>0?Math.round((counts[i]/total)*100):0;
+        return `<div class="res-bar-row">
+          <div class="res-bar-label" title="${o}">${o}</div>
+          <div class="res-bar-track"><div class="res-bar-fill" id="rbar-${i}" style="width:0%;background:${BAR_COLORS[i%BAR_COLORS.length]}">${counts[i]>0?counts[i]+' hlasů':''}</div></div>
+          <div class="res-bar-pct" style="color:${BAR_COLORS[i%BAR_COLORS.length]}">${pct}%</div>
         </div>`;
       }).join('')}
     </div>`;
 
-  setTimeout(() => {
-    counts.forEach((c, i) => {
-      const bar = document.getElementById('rbar-' + i);
-      if (bar) bar.style.width = Math.round((c / max) * 100) + '%';
+  setTimeout(()=>{
+    counts.forEach((c,i)=>{
+      const bar=document.getElementById('rbar-'+i);
+      if(bar)bar.style.width=Math.round((c/max)*100)+'%';
     });
-  }, 100);
+  },100);
 
-  const isLast = currentQ >= QUESTIONS.length - 1;
-  document.getElementById('mod-actions').innerHTML = `
-    <button class="mod-btn blue" onclick="${isLast ? 'showFinalResults()' : 'nextQuestion()'}">
-      ${isLast ? '🏁 Závěrečné výsledky' : 'Další otázka →'}
+  document.getElementById('mod-actions').innerHTML=`
+    <button class="mod-act-btn ${isLast?'purple':'blue'}" onclick="${isLast?'showFinalResults()':'nextQuestion()'}">
+      ${isLast?'🏁 Závěrečné výsledky':'Další otázka →'}
     </button>`;
 }
 
-async function nextQuestion() {
-  currentQ++;
-  answeredThisQ = new Set();
-  phase = 'question';
-  await sb.from('sessions').update({ current_question: currentQ, phase: 'question' }).eq('id', sessionId);
+async function nextQuestion(){
+  currentQ++;answeredThisQ=new Set();phase='question';
+  await sb.from('sessions').update({current_question:currentQ,phase:'question'}).eq('id',sessionId);
   renderModQuestion();
 }
 
-async function showFinalResults() {
-  phase = 'final';
-  await sb.from('sessions').update({ phase: 'final' }).eq('id', sessionId);
-  const { data: allAnswers } = await sb.from('answers').select('*').eq('session_id', sessionId);
-  const { data: sessionData } = await sb.from('sessions').select('started_at').eq('id', sessionId).single();
-  const startedAt = sessionData?.started_at ? new Date(sessionData.started_at).getTime() : Date.now();
-  const total = Object.keys(participants).length;
+async function showFinalResults(){
+  phase='final';
+  await sb.from('sessions').update({phase:'final'}).eq('id',sessionId);
+  const {data:allAns}=await sb.from('answers').select('*').eq('session_id',sessionId);
+  const {data:sess}=await sb.from('sessions').select('started_at').eq('id',sessionId).single();
+  const startAt=sess?.started_at?new Date(sess.started_at).getTime():Date.now();
+  const total=Object.keys(participants).length;
+  const speeds={};
+  Object.values(participants).forEach(p=>{speeds[p.id]={name:p.name,times:[]}});
+  (allAns||[]).forEach(a=>{if(speeds[a.participant_id])speeds[a.participant_id].times.push(new Date(a.answered_at).getTime()-startAt)});
+  const ranking=Object.values(speeds).filter(s=>s.times.length>0).map(s=>({name:s.name,avg:s.times.reduce((a,b)=>a+b,0)/s.times.length})).sort((a,b)=>a.avg-b.avg);
+  const fmt=ms=>ms<60000?Math.round(ms/1000)+'s':Math.round(ms/60000)+'min';
+  const fastest=ranking[0],slowest=ranking[ranking.length-1];
 
-  // Speed ranking — average answer time per participant
-  const speeds = {};
-  Object.values(participants).forEach(p => { speeds[p.id] = { name: p.name, times: [] }; });
-  (allAnswers || []).forEach(a => {
-    if (speeds[a.participant_id]) {
-      speeds[a.participant_id].times.push(new Date(a.answered_at).getTime() - startedAt);
-    }
-  });
-  const ranking = Object.values(speeds)
-    .filter(s => s.times.length > 0)
-    .map(s => ({ name: s.name, avg: s.times.reduce((a,b) => a+b, 0) / s.times.length }))
-    .sort((a, b) => a.avg - b.avg);
+  document.getElementById('trophies').innerHTML=`
+    ${fastest?`<div class="trophy-card gold"><div class="trophy-emoji">⚡</div><div class="trophy-name">${fastest.name}</div><div class="trophy-label">Nejrychlejší střelec · ø ${fmt(fastest.avg)}</div></div>`:''}
+    ${slowest&&slowest.name!==fastest?.name?`<div class="trophy-card turtle"><div class="trophy-emoji">🐢</div><div class="trophy-name">${slowest.name}</div><div class="trophy-label">Největší přemýšlivec · ø ${fmt(slowest.avg)}</div></div>`:''}`;
 
-  const fastest = ranking[0];
-  const slowest = ranking[ranking.length - 1];
-  const fmtTime = ms => ms < 60000 ? Math.round(ms/1000) + 's' : Math.round(ms/60000) + 'min';
-
-  document.getElementById('podium').innerHTML = `
-    ${fastest ? `<div class="podium-item fastest">
-      <div class="podium-emoji">⚡</div>
-      <div class="podium-name">${fastest.name}</div>
-      <div class="podium-label">Nejrychlejší střelec<br>ø ${fmtTime(fastest.avg)}</div>
-    </div>` : ''}
-    ${slowest && slowest.name !== fastest?.name ? `<div class="podium-item slowest">
-      <div class="podium-emoji">🐢</div>
-      <div class="podium-name">${slowest.name}</div>
-      <div class="podium-label">Největší přemýšlivec<br>ø ${fmtTime(slowest.avg)}</div>
-    </div>` : ''}`;
-
-  document.getElementById('final-summary').innerHTML = QUESTIONS.map((q, qi) => {
-    const counts = Array(q.opts.length).fill(0);
-    (allAnswers || []).filter(a => a.question_index === qi).forEach(a => a.selected_options.forEach(i => counts[i]++));
-    const max = Math.max(...counts, 1);
-    return `<div class="summary-item">
-      <div class="summary-q">${qi+1}. ${q.q}</div>
-      ${q.opts.map((o, i) => {
-        const pct = total > 0 ? Math.round((counts[i]/total)*100) : 0;
-        return `<div class="summary-bar-item">
-          <div class="summary-bar-label"><span>${o}</span><span>${pct}%</span></div>
-          <div class="summary-bar-track"><div class="summary-bar-fill" id="sfb-${qi}-${i}" style="width:0%"></div></div>
+  document.getElementById('final-summary').innerHTML=QUESTIONS.map((q,qi)=>{
+    const counts=Array(q.opts.length).fill(0);
+    (allAns||[]).filter(a=>a.question_index===qi).forEach(a=>a.selected_options.forEach(i=>counts[i]++));
+    const max=Math.max(...counts,1);
+    return `<div class="sum-item">
+      <div class="sum-q">${qi+1}. ${q.q}</div>
+      ${q.opts.map((o,i)=>{
+        const pct=total>0?Math.round((counts[i]/total)*100):0;
+        return `<div class="sum-bar-row">
+          <div class="sum-bar-label"><span>${o}</span><span>${pct}%</span></div>
+          <div class="sum-bar-track"><div class="sum-bar-fill" id="sfb-${qi}-${i}" style="width:0%;background:${BAR_COLORS[i%BAR_COLORS.length]}"></div></div>
         </div>`;
       }).join('')}
     </div>`;
   }).join('');
 
   showScreen('final-screen');
-  setTimeout(() => {
-    QUESTIONS.forEach((q, qi) => {
-      const counts = Array(q.opts.length).fill(0);
-      (allAnswers||[]).filter(a=>a.question_index===qi).forEach(a=>a.selected_options.forEach(i=>counts[i]++));
-      const max = Math.max(...counts,1);
-      counts.forEach((c,i) => {
-        const bar = document.getElementById(`sfb-${qi}-${i}`);
-        if (bar) bar.style.width = Math.round((c/max)*100)+'%';
-      });
+  setTimeout(()=>{
+    QUESTIONS.forEach((q,qi)=>{
+      const counts=Array(q.opts.length).fill(0);
+      (allAns||[]).filter(a=>a.question_index===qi).forEach(a=>a.selected_options.forEach(i=>counts[i]++));
+      const max=Math.max(...counts,1);
+      counts.forEach((c,i)=>{const bar=document.getElementById(`sfb-${qi}-${i}`);if(bar)bar.style.width=Math.round((c/max)*100)+'%'});
     });
-  }, 200);
+  },200);
 }
 
 // ── PARTICIPANT ──
-async function joinSession() {
-  const code = document.getElementById('code-input').value.trim().toUpperCase();
-  const name = document.getElementById('name-input').value.trim();
-  if (!code) { toast('Zadej kód session'); return; }
-  if (!name) { toast('Zadej své jméno'); return; }
-
-  // Find session by code
-  const { data: sessions, error: sErr } = await sb.from('sessions').select('*').eq('code', code).in('phase', ['lobby','question','results']).limit(1);
-  if (sErr) { toast('Chyba: ' + sErr.message, 4000); console.error(sErr); return; }
-  if (!sessions || sessions.length === 0) {
-    toast('Kód „' + code + '" nebyl nalezen. Zkontroluj kód na obrazovce moderátora.', 4000);
-    return;
-  }
-
-  const session = sessions[0];
-  sessionId = session.id;
-  sessionCode = session.code;
-  phase = session.phase;
-  currentQ = session.current_question;
-  myName = name;
-
-  const { data: p, error: pErr } = await sb.from('participants').insert({ session_id: sessionId, name }).select().single();
-  if (pErr) { toast('Chyba při připojování: ' + pErr.message, 4000); return; }
-  participantId = p.id;
-
-  document.getElementById('my-name-badge').textContent = '👋 ' + name;
-  document.getElementById('my-code-badge').textContent = sessionCode;
-
-  subscribeParticipant();
-
-  if (phase === 'question') {
-    // Check if already answered this question
-    const { data: existing } = await sb.from('answers').select('id').eq('session_id', sessionId).eq('participant_id', participantId).eq('question_index', currentQ);
-    if (existing && existing.length > 0) {
-      showScreen('answered-screen');
-    } else {
-      selectedOpts = [];
-      renderParticipantQuestion(currentQ);
-    }
-  } else if (phase === 'results') {
-    showScreen('answered-screen');
-  } else {
-    showScreen('waiting-screen');
-  }
-}
-
-function subscribeParticipant() {
+async function joinSession(){
+  const code=document.getElementById('code-input').value.trim().toUpperCase();
+  const name=document.getElementById('name-input').value.trim();
+  if(!code){toast('Zadej kód session');return}
+  if(!name){toast('Zadej své jméno');return}
+  const {data:sessions,error:sErr}=await sb.from('sessions').select('*').eq('code',code).in('phase',['lobby','question','results']).limit(1);
+  if(sErr){toast('Chyba: '+sErr.message,4000);return}
+  if(!sessions||sessions.length===0){toast('Kód „'+code+'" nenalezen. Zkontroluj kód na obrazovce.',4000);return}
+  const session=sessions[0];
+  sessionId=session.id;sessionCode=session.code;phase=session.phase;currentQ=session.current_question;myName=name;
+  const {data:p,error:pErr}=await sb.from('participants').insert({session_id:sessionId,name}).select().single();
+  if(pErr){toast('Chyba: '+pErr.message,4000);return}
+  participantId=p.id;
+  document.getElementById('my-name-badge').textContent='👋 '+name;
+  document.getElementById('my-code-badge').textContent=sessionCode;
   pollParticipant();
+  if(phase==='question'){
+    const {data:ex}=await sb.from('answers').select('id').eq('session_id',sessionId).eq('participant_id',participantId).eq('question_index',currentQ);
+    if(ex&&ex.length>0)showScreen('answered-screen');
+    else{selectedOpts=[];renderParticipantQuestion(currentQ)}
+  }else if(phase==='results')showScreen('answered-screen');
+  else showScreen('waiting-screen');
 }
 
-async function pollParticipant() {
-  if (role !== 'participant' || !sessionId) return;
-  const { data: s } = await sb.from('sessions').select('phase, current_question').eq('id', sessionId).single();
-  if (!s) { setTimeout(pollParticipant, 2000); return; }
-
-  const newPhase = s.phase;
-  const newQ = s.current_question;
-
-  if (newPhase === 'final') { showScreen('p-final-screen'); return; }
-
-  if (newPhase === 'question' && (newPhase !== phase || newQ !== currentQ)) {
-    phase = newPhase;
-    currentQ = newQ;
-    const { data: existing } = await sb.from('answers').select('id').eq('session_id', sessionId).eq('participant_id', participantId).eq('question_index', currentQ);
-    if (existing && existing.length > 0) {
-      showScreen('answered-screen');
-    } else {
-      selectedOpts = [];
-      renderParticipantQuestion(currentQ);
-    }
-  } else if (newPhase === 'results' && phase !== 'results') {
-    phase = newPhase;
-    showScreen('answered-screen');
-  } else {
-    phase = newPhase;
-  }
-
-  setTimeout(pollParticipant, 2000);
+async function pollParticipant(){
+  if(role!=='participant'||!sessionId)return;
+  const {data:s}=await sb.from('sessions').select('phase,current_question').eq('id',sessionId).single();
+  if(!s){setTimeout(pollParticipant,2000);return}
+  if(s.phase==='final'){showScreen('p-final-screen');return}
+  if(s.phase==='question'&&(s.phase!==phase||s.current_question!==currentQ)){
+    phase=s.phase;currentQ=s.current_question;
+    const {data:ex}=await sb.from('answers').select('id').eq('session_id',sessionId).eq('participant_id',participantId).eq('question_index',currentQ);
+    if(ex&&ex.length>0)showScreen('answered-screen');
+    else{selectedOpts=[];renderParticipantQuestion(currentQ)}
+  }else if(s.phase==='results'&&phase!=='results'){phase=s.phase;showScreen('answered-screen')}
+  else phase=s.phase;
+  setTimeout(pollParticipant,2000);
 }
 
-function renderParticipantQuestion(qIdx) {
-  const q = QUESTIONS[qIdx];
-  document.getElementById('p-block-name').textContent = q.block;
-  document.getElementById('p-q-num').textContent = `Otázka ${qIdx+1} z ${QUESTIONS.length}`;
-  document.getElementById('p-q-text').textContent = q.q;
-  const badge = document.getElementById('p-q-type');
-  badge.textContent = q.multi ? '✦ Více možností — vyber vše co platí' : '● Vyber jednu odpověď';
-  badge.className = 'q-type-badge ' + (q.multi ? 'multi' : 'single');
-  const keys = 'ABCDEFGHIJKLMNOPQRSTU';
-  document.getElementById('p-options').innerHTML = q.opts.map((o, i) =>
-    `<button class="opt-btn" id="popt-${i}" onclick="togglePOpt(${i})">
+function renderParticipantQuestion(qIdx){
+  const q=QUESTIONS[qIdx];
+  document.getElementById('p-block-name').textContent=q.block;
+  document.getElementById('p-q-num').textContent=`${qIdx+1} / ${QUESTIONS.length}`;
+  document.getElementById('p-progress').style.width=Math.round(((qIdx+1)/QUESTIONS.length)*100)+'%';
+  document.getElementById('p-q-text').textContent=q.q;
+  const badge=document.getElementById('p-q-type');
+  badge.textContent=q.multi?'✦ Více možností — vyber vše co platí':'● Vyber jednu odpověď';
+  badge.className='q-type-tag '+(q.multi?'multi':'single');
+  const keys='ABCDEFGHIJKLMNOPQRSTU';
+  document.getElementById('p-options').innerHTML=q.opts.map((o,i)=>
+    `<button class="opt-card" id="popt-${i}" onclick="togglePOpt(${i})">
       <span class="opt-key">${keys[i]}</span><span>${o}</span>
     </button>`).join('');
-  document.getElementById('submit-btn').disabled = true;
+  document.getElementById('submit-btn').disabled=true;
   showScreen('question-screen');
 }
 
-function togglePOpt(i) {
-  const q = QUESTIONS[currentQ];
-  if (q.multi) {
-    const idx = selectedOpts.indexOf(i);
-    if (idx > -1) selectedOpts.splice(idx, 1); else selectedOpts.push(i);
-  } else {
-    selectedOpts = [i];
-  }
-  document.querySelectorAll('.opt-btn').forEach((btn, bi) => btn.classList.toggle('selected', selectedOpts.includes(bi)));
-  document.getElementById('submit-btn').disabled = selectedOpts.length === 0;
+function togglePOpt(i){
+  const q=QUESTIONS[currentQ];
+  if(q.multi){const idx=selectedOpts.indexOf(i);if(idx>-1)selectedOpts.splice(idx,1);else selectedOpts.push(i)}
+  else selectedOpts=[i];
+  document.querySelectorAll('.opt-card').forEach((btn,bi)=>btn.classList.toggle('selected',selectedOpts.includes(bi)));
+  document.getElementById('submit-btn').disabled=selectedOpts.length===0;
 }
 
-async function submitAnswer() {
-  if (selectedOpts.length === 0) return;
-  document.getElementById('submit-btn').disabled = true;
-  const { error } = await sb.from('answers').insert({
-    session_id: sessionId, participant_id: participantId,
-    question_index: currentQ, selected_options: selectedOpts,
-    answered_at: new Date().toISOString()
-  });
-  if (error) { toast('Chyba při odesílání — zkus znovu'); document.getElementById('submit-btn').disabled = false; return; }
+async function submitAnswer(){
+  if(selectedOpts.length===0)return;
+  document.getElementById('submit-btn').disabled=true;
+  const {error}=await sb.from('answers').insert({session_id:sessionId,participant_id:participantId,question_index:currentQ,selected_options:selectedOpts,answered_at:new Date().toISOString()});
+  if(error){toast('Chyba — zkus znovu');document.getElementById('submit-btn').disabled=false;return}
   showScreen('answered-screen');
 }
 </script>
