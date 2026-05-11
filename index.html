@@ -91,8 +91,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0D1B2A;color:#F0F4F
 @keyframes glow{0%{text-shadow:0 0 20px rgba(255,214,0,.3)}100%{text-shadow:0 0 70px rgba(255,214,0,.9)}}
 .lobby-hint{font-size:.85rem;color:#7A8FAF;margin-bottom:2rem}
 .fish-tank{width:100%;max-width:760px;height:130px;background:linear-gradient(180deg,#061428,#030C1A);border-radius:16px;border:1px solid #1B3A5F;position:relative;overflow:hidden;margin-bottom:2rem}
-.fish{position:absolute;display:flex;align-items:center;gap:6px;padding:5px 12px 5px 8px;border-radius:30px;font-size:.82rem;font-weight:700;color:white;white-space:nowrap;animation:swim linear infinite,popIn .4s cubic-bezier(.175,.885,.32,1.275)}
-@keyframes swim{0%{left:110%}100%{left:-200px}}
+.fish{position:absolute;display:flex;align-items:center;gap:6px;padding:5px 12px 5px 8px;border-radius:30px;font-size:.82rem;font-weight:700;color:white;white-space:nowrap;transition:none;animation:popIn .4s cubic-bezier(.175,.885,.32,1.275)}
 @keyframes popIn{0%{transform:scale(0)}40%{transform:scale(1.25)}100%{transform:scale(1)}}
 .fish-icon{font-size:1.2rem}
 .lobby-count{font-size:min(12vw,6rem);font-weight:900;color:white;line-height:1;margin-bottom:.25rem}
@@ -108,10 +107,10 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0D1B2A;color:#F0F4F
 .timer-display.urgent{color:#E8175D;animation:urgentPulse .5s infinite}
 @keyframes urgentPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
 .timer-ring{width:100px;height:100px;margin:.5rem auto}
-.mod-q-meta{font-size:.75rem;color:#7A8FAF;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem}
-.mod-q-text{font-size:1.4rem;font-weight:800;line-height:1.35;margin-bottom:1rem}
-.mod-opts-preview{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1rem}
-.mod-opt{padding:.6rem .8rem;border-radius:10px;font-size:.82rem;font-weight:600;color:white;display:flex;align-items:center;gap:.5rem}
+.mod-q-meta{font-size:.75rem;color:#7A8FAF;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem}
+.mod-q-text{font-size:1.9rem;font-weight:800;line-height:1.3;margin-bottom:1.2rem}
+.mod-opts-preview{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.2rem}
+.mod-opt{padding:.85rem 1rem;border-radius:12px;font-size:1rem;font-weight:600;color:white;display:flex;align-items:center;gap:.5rem}
 .mod-opt.is-correct{box-shadow:0 0 0 2px #4ADE80}
 .mod-opt:nth-child(1){background:#1B4FD8}
 .mod-opt:nth-child(2){background:#00A86B}
@@ -126,10 +125,10 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0D1B2A;color:#F0F4F
 .brow-fill:nth-of-type(1){background:#1B4FD8}
 
 /* right panel header */
-.rp-head{padding:1rem;border-bottom:1px solid #2A3F5F;flex-shrink:0;text-align:center}
+.rp-head{padding:1.2rem 1rem 1rem;border-bottom:1px solid #2A3F5F;flex-shrink:0;text-align:center}
 .rp-score{font-size:2.5rem;font-weight:900;line-height:1}
-.rp-lbl{font-size:.72rem;color:#7A8FAF;margin-top:.2rem}
-.rp-msg{font-size:.9rem;font-weight:700;margin-top:.5rem;min-height:1.3rem}
+.rp-lbl{font-size:.72rem;color:#7A8FAF;margin-top:.2rem;margin-bottom:.75rem}
+.rp-msg{font-size:.95rem;font-weight:700;margin-top:.75rem;min-height:1.4rem;padding:.4rem .5rem;background:rgba(255,255,255,.04);border-radius:8px}
 .names-wrap{flex:1;overflow-y:auto;padding:.75rem}
 .names-flow{display:flex;flex-wrap:wrap;gap:.45rem;align-content:flex-start}
 .nchip{padding:.45rem .9rem;border-radius:30px;font-size:.82rem;font-weight:700;display:flex;align-items:center;gap:.4rem;border:1.5px solid transparent;transition:all .3s}
@@ -200,7 +199,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0D1B2A;color:#F0F4F
   <div class="role-card">
     <div class="role-title">KPÍčkovej kvízeček 🏆</div>
     <p class="role-sub">Tak schválně!</p>
-    <button class="rbtn mod" onclick="goMod()">🎙️ Jsem moderátor</button>
+    <div id="mod-btn-wrap"><button class="rbtn mod" onclick="goMod()">🎙️ Jsem moderátor</button></div>
     <button class="rbtn play" onclick="goJoin()">🙋 Chci hrát</button>
   </div>
 </div>
@@ -209,7 +208,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0D1B2A;color:#F0F4F
   <div class="join-card" style="margin:auto">
     <h2>Připojit se</h2>
     <p>Zadej kód ze sdílené obrazovky</p>
-    <input id="code-inp" class="jinput code" placeholder="KAPR" maxlength="15" oninput="this.value=this.value.toUpperCase()" autocomplete="off">
+    <input id="code-inp" class="jinput code" placeholder="" maxlength="15" oninput="this.value=this.value.toUpperCase()" autocomplete="off">
     <input id="name-inp" class="jinput" placeholder="Tvoje jméno nebo přezdívka" maxlength="20" autocomplete="off">
     <button class="jbtn" onclick="doJoin()">Připojit se →</button>
   </div>
@@ -284,6 +283,14 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0D1B2A;color:#F0F4F
 <div class="toast" id="toast"></div>
 
 <script>
+// On load: hide moderator button if game already running
+window.addEventListener('DOMContentLoaded',async()=>{
+  const {data}=await sb.from('sessions').select('phase').in('phase',['question','results']).limit(1);
+  if(data&&data.length>0){
+    const w=document.getElementById('mod-btn-wrap');
+    if(w)w.style.display='none';
+  }
+});
 const SB_URL='https://zzyftqgvsnhmjhcljfft.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp6eWZ0cWd2c25obWpoY2xqZmZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMzgyNzMsImV4cCI6MjA5MzgxNDI3M30.Arv9nqzmSs8fo0HCq3cK9HteQDKeeDf8f_y07jHp-us';
 const sb=supabase.createClient(SB_URL,SB_KEY);
@@ -323,7 +330,14 @@ function genCode(){return CODES[Math.floor(Math.random()*CODES.length)]}
 
 // ROLE
 function goMod(){role='moderator';initMod()}
-function goJoin(){role='participant';show('join-screen');setTimeout(()=>document.getElementById('code-inp').focus(),100)}
+async function goJoin(){
+  // Check if a game is in progress (non-lobby) - if so, show message
+  const {data:active}=await sb.from('sessions').select('id,phase').in('phase',['question','results','final']).limit(1);
+  if(active&&active.length>0&&active[0].phase!='final'){
+    // game in progress - hide moderator button, show join only
+  }
+  role='participant';show('join-screen');setTimeout(()=>document.getElementById('code-inp').focus(),100);
+}
 
 // ══ MODERATOR ══
 async function initMod(){
@@ -365,21 +379,56 @@ function renderLobby(){
   refreshLobby();
 }
 
+let fishAnimFrame=null;
+let fishPhysics={};
+
 function refreshLobby(){
   const count=Object.keys(participants).length;
   const lc=document.getElementById('lcount');if(lc)lc.textContent=count;
   const gb=document.getElementById('go-btn');if(gb){gb.disabled=count===0;gb.textContent=count===0?'⏳ Čekám na hráče...':'🚀 Spustit kvíz ('+count+' hráčů)'}
   const tank=document.getElementById('fish-tank');if(!tank)return;
+  const tw=tank.offsetWidth||800;const th=tank.offsetHeight||130;
   Object.values(participants).forEach((p,idx)=>{
     if(fishData[p.id])return;
     const i=Object.keys(fishData).length;
-    fishData[p.id]={top:12+Math.random()*65,dur:9+Math.random()*9,color:FISH_COLORS[i%FISH_COLORS.length],icon:FISH_ICONS[i%FISH_ICONS.length]};
-    const f=fishData[p.id];
-    const el=document.createElement('div');el.className='fish';
-    el.style.cssText=`top:${f.top}%;background:${f.color};animation-duration:${f.dur}s`;
-    el.innerHTML=`<span class="fish-icon">${f.icon}</span>${p.name}`;
+    const color=FISH_COLORS[i%FISH_COLORS.length];
+    const icon=FISH_ICONS[i%FISH_ICONS.length];
+    fishData[p.id]={color,icon};
+    const el=document.createElement('div');el.className='fish';el.id='fish-'+p.id;
+    el.style.cssText=`background:${color};position:absolute`;
+    el.innerHTML=`<span class="fish-icon">${icon}</span>${p.name}`;
     tank.appendChild(el);
+    // Init physics
+    const w=el.offsetWidth||100;const h=el.offsetHeight||30;
+    fishPhysics[p.id]={
+      x:Math.random()*(tw-w),y:Math.random()*(th-h),
+      vx:(Math.random()>.5?1:-1)*(1+Math.random()*1.5),
+      vy:(Math.random()>.5?1:-1)*(0.5+Math.random()),
+      w,h,flip:false
+    };
   });
+  if(!fishAnimFrame)animateFish();
+}
+
+function animateFish(){
+  const tank=document.getElementById('fish-tank');
+  if(!tank){fishAnimFrame=null;return;}
+  const tw=tank.offsetWidth||800;const th=tank.offsetHeight||130;
+  Object.keys(fishPhysics).forEach(id=>{
+    const f=fishPhysics[id];
+    const el=document.getElementById('fish-'+id);
+    if(!el)return;
+    if(f.w===0){f.w=el.offsetWidth||100;f.h=el.offsetHeight||30;}
+    f.x+=f.vx;f.y+=f.vy;
+    // Bounce off walls
+    if(f.x<=0){f.x=0;f.vx=Math.abs(f.vx);f.flip=false;}
+    if(f.x+f.w>=tw){f.x=tw-f.w;f.vx=-Math.abs(f.vx);f.flip=true;}
+    if(f.y<=0){f.y=0;f.vy=Math.abs(f.vy);}
+    if(f.y+f.h>=th){f.y=th-f.h;f.vy=-Math.abs(f.vy);}
+    el.style.left=f.x+'px';el.style.top=f.y+'px';
+    el.style.transform=f.flip?'scaleX(-1)':'scaleX(1)';
+  });
+  fishAnimFrame=requestAnimationFrame(animateFish);
 }
 
 async function startQuiz(){
@@ -406,7 +455,8 @@ function renderModQuestion(){
     <div class="mod-q-right">
       <div class="rp-head">
         <div style="font-size:4rem;font-weight:900;color:#FFD600;text-shadow:0 0 30px rgba(255,214,0,.5)" id="mod-timer">${TIME_LIMIT}</div>
-        <div style="font-size:.72rem;color:#7A8FAF">sekund zbývá</div>
+        <div style="font-size:.72rem;color:#7A8FAF;margin-bottom:1rem">sekund zbývá</div>
+        <hr style="border:none;border-top:1px solid #2A3F5F;margin:.5rem 0 1rem">
         <div class="rp-score" id="rp-ans">0</div>
         <div class="rp-lbl">/ ${Object.keys(participants).length} odpovědělo</div>
         <div class="rp-msg" id="rp-msg"></div>
