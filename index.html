@@ -289,14 +289,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#FFFFFF;color:#F0F4F
 <div class="toast" id="toast"></div>
 
 <script>
-// On load: hide moderator button if game already running
-window.addEventListener('DOMContentLoaded',async()=>{
-  const {data}=await sb.from('sessions').select('phase').in('phase',['question','results']).limit(1);
-  if(data&&data.length>0){
-    const w=document.getElementById('mod-btn-wrap');
-    if(w)w.style.display='none';
-  }
-});
+// Mod button always visible - no auto-hide on load
 const SB_URL='https://zzyftqgvsnhmjhcljfft.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp6eWZ0cWd2c25obWpoY2xqZmZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMzgyNzMsImV4cCI6MjA5MzgxNDI3M30.Arv9nqzmSs8fo0HCq3cK9HteQDKeeDf8f_y07jHp-us';
 const sb=supabase.createClient(SB_URL,SB_KEY);
@@ -443,14 +436,7 @@ async function startQuiz(){
   if(typeof startBgMusic!=='undefined')startBgMusic();
   renderModQuestion();
 }
-// Re-check mod button visibility every 5s on role screen
-setInterval(async()=>{
-  if(document.getElementById('role-screen').classList.contains('active')&&!role){
-    const {data}=await sb.from('sessions').select('phase').in('phase',['question','results']).limit(1);
-    const w=document.getElementById('mod-btn-wrap');
-    if(w)w.style.display=(data&&data.length>0)?'none':'block';
-  }
-},5000);
+
 
 function renderModQuestion(){
   const q=QUESTIONS[currentQ];
